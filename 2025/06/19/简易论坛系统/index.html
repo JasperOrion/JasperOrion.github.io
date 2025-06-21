@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>简易论坛系统 | Debugging</title><meta name="author" content="Jasper Orion"><meta name="copyright" content="Jasper Orion"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基于Java Swing的简易论坛系统 注:本项目由三人协作开发  一、项目简介​	本项目是一个基于 Java 语言开发的桌面应用程序，借助 Swing 库实现了图形用户界(GUI)。该系统为用户提供了一个交流的平台，用户能够在上面进行注册、登录、发帖、回帖、查看帖子等操作，同时管理员还具备管理帖子（置顶、取消置顶、删除）等功能。系统使用文件(user.bat;post.bat)进行数据的持久化存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简易论坛系统">
+<meta property="og:url" content="http://example.com/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Debugging">
+<meta property="og:description" content="基于Java Swing的简易论坛系统 注:本项目由三人协作开发  一、项目简介​	本项目是一个基于 Java 语言开发的桌面应用程序，借助 Swing 库实现了图形用户界(GUI)。该系统为用户提供了一个交流的平台，用户能够在上面进行注册、登录、发帖、回帖、查看帖子等操作，同时管理员还具备管理帖子（置顶、取消置顶、删除）等功能。系统使用文件(user.bat;post.bat)进行数据的持久化存">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/Hollow%20Knight.png">
+<meta property="article:published_time" content="2025-06-19T07:44:11.000Z">
+<meta property="article:modified_time" content="2025-06-21T02:35:44.082Z">
+<meta property="article:author" content="Jasper Orion">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Hollow%20Knight.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "简易论坛系统",
+  "url": "http://example.com/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/",
+  "image": "http://example.com/images/Hollow%20Knight.png",
+  "datePublished": "2025-06-19T07:44:11.000Z",
+  "dateModified": "2025-06-21T02:35:44.082Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jasper Orion",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '简易论坛系统',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Debugging</span></a><a class="nav-page-title" href="/"><span class="site-name">简易论坛系统</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">简易论坛系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-19T07:44:11.000Z" title="发表于 2025-06-19 15:44:11">2025-06-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-21T02:35:44.082Z" title="更新于 2025-06-21 10:35:44">2025-06-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="基于Java-Swing的简易论坛系统"><a href="#基于Java-Swing的简易论坛系统" class="headerlink" title="基于Java Swing的简易论坛系统"></a>基于Java Swing的简易论坛系统</h1><hr>
+<p>注:本项目由三人协作开发</p>
+<hr>
+<h2 id="一、项目简介"><a href="#一、项目简介" class="headerlink" title="一、项目简介"></a>一、项目简介</h2><p>​	本项目是一个基于 Java 语言开发的桌面应用程序，借助 Swing 库实现了图形用户界(GUI)。该系统为用户提供了一个交流的平台，用户能够在上面进行<strong>注册、登录、发帖、回帖、查看帖子</strong>等操作，同时管理员还具备<strong>管理帖子（置顶、取消置顶、删除</strong>）等功能。系统使用文件(user.bat;post.bat)进行数据的持久化存储，确保数据在程序关闭后依然能够保存。</p>
+<h2 id="二、技术架构"><a href="#二、技术架构" class="headerlink" title="二、技术架构"></a>二、技术架构</h2><h3 id="2-1-核心技术栈"><a href="#2-1-核心技术栈" class="headerlink" title="2.1 核心技术栈"></a>2.1 核心技术栈</h3><ul>
+<li><strong>开发语言</strong>：Java 17（支持新特性但保持向后兼容）</li>
+<li><strong>界面框架</strong>：Java Swing（利用 JPane、JTable 等组件构建界面）</li>
+<li><strong>数据存储</strong>：Java 对象序列化（通过 ObjectInputStream&#x2F;ObjectOutputStream 实现文件持久化）</li>
+<li><strong>版本控制</strong>：Git（采用分支开发模式，主分支保持稳定）</li>
+</ul>
+<h3 id="2-2架构设计"><a href="#2-2架构设计" class="headerlink" title="2.2架构设计"></a>2.2架构设计</h3><p>采用三层架构设计,确保代码的可维护性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">ForumSystem/</span><br><span class="line">├── src/</span><br><span class="line">│   ├── data/         // 数据层，实体类和数据管理</span><br><span class="line">│   │   ├── User.java</span><br><span class="line">│   │   ├── Post.java</span><br><span class="line">│   │   ├── Reply.java</span><br><span class="line">│   │   └── ForumDataManager.java</span><br><span class="line">│   ├── main/         // 主程序入口,协调界面切换,实现用户操作相应</span><br><span class="line">│   │   └── ForumSystem.java</span><br><span class="line">│   └── ui/           // 界面层，所有 Swing 面板</span><br><span class="line">│       ├── ForumPanel.java</span><br><span class="line">│       ├── LoginPanel.java</span><br><span class="line">│       ├── RegisterPanel.java</span><br><span class="line">│       ├── ViewPostPanel.java</span><br><span class="line">│       ├── MyRepliesPanel.java</span><br><span class="line">│       ├── ActivityRankingPanel.java</span><br><span class="line">│       ├── AdminPanel.java</span><br><span class="line">│       ├── ViewPostPanel.java</span><br><span class="line">│       └── NewPostPanel.java</span><br><span class="line">├── README.md</span><br><span class="line">└── .gitignore</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、功能模块详解：从用户到管理员"><a href="#三、功能模块详解：从用户到管理员" class="headerlink" title="三、功能模块详解：从用户到管理员"></a>三、功能模块详解：从用户到管理员</h2><h3 id="3-1-功能需求分析"><a href="#3-1-功能需求分析" class="headerlink" title="3.1 功能需求分析"></a>3.1 功能需求分析</h3><table>
+<thead>
+<tr>
+<th>功能模块</th>
+<th>具体描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户注册与登录</td>
+<td>用户可注册新账号，登录后进入论坛主界面，支持身份验证</td>
+</tr>
+<tr>
+<td>帖子管理</td>
+<td>用户可浏览所有帖子，点击查看帖子详情，支持发帖</td>
+</tr>
+<tr>
+<td>回帖管理</td>
+<td>用户可对任意帖子进行回帖，回帖内容与时间自动记录</td>
+</tr>
+<tr>
+<td>我的回帖</td>
+<td>用户可查看自己所有回帖，双击可跳转到对应帖子详情</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-典型功能流程"><a href="#3-2-典型功能流程" class="headerlink" title="3.2 典型功能流程"></a>3.2 典型功能流程</h3><h4 id="3-2-1-发帖流程"><a href="#3-2-1-发帖流程" class="headerlink" title="3.2.1 发帖流程"></a>3.2.1 发帖流程</h4><ol>
+<li>用户点击 “发帖” 按钮进入 NewPostPanel</li>
+<li>输入标题与内容后点击 “发布”</li>
+<li>系统自动记录作者与时间，更新 ForumDataManager 中的帖子列表</li>
+<li>刷新 ForumPanel 显示新帖子，并更新用户发帖数统计</li>
+</ol>
+<h4 id="3-2-2-管理员置顶操作"><a href="#3-2-2-管理员置顶操作" class="headerlink" title="3.2.2 管理员置顶操作"></a>3.2.2 管理员置顶操作</h4><ol>
+<li>在 AdminPanel 中选中目标帖子</li>
+<li>点击 “置顶” 按钮触发事件</li>
+<li>系统修改 Post 的 isSticky 属性，调用 dataManager 更新数据</li>
+<li>同时刷新管理员界面与论坛主界面，确保置顶帖显示在列表顶部</li>
+</ol>
+<h2 id="四、项目亮点"><a href="#四、项目亮点" class="headerlink" title="四、项目亮点"></a>四、项目亮点</h2><ol>
+<li><strong>模块化设计</strong>：项目采用模块化设计，将不同的功能模块分离到不同的类和包中，如 <code>data</code> 包负责数据的管理和持久化，<code>ui</code> 包负责界面的设计和交互，<code>main</code> 包负责主程序的启动和流程控制。这种设计使得代码结构清晰，易于维护和扩展。</li>
+<li><strong>数据持久化</strong>：使用文件进行数据的持久化存储，确保数据在程序关闭后依然能够保存。即使程序重新启动，用户和帖子数据也不会丢失。</li>
+<li><strong>用户交互友好</strong>：使用 Swing 库创建了直观的图形用户界面，用户可以方便地进行各种操作。同时，系统在操作过程中会给出相应的提示信息，如登录失败、注册成功等，提高了用户体验。</li>
+<li><strong>权限管理</strong>：系统区分了普通用户和管理员的权限，管理员拥有较高的权限，可以对帖子进行管理，确保论坛的正常运行。</li>
+</ol>
+<h2 id="五、系统演示操作视频或者主要功能截图"><a href="#五、系统演示操作视频或者主要功能截图" class="headerlink" title="五、系统演示操作视频或者主要功能截图"></a>五、系统演示操作视频或者主要功能截图</h2><ol>
+<li><strong>登录&#x2F;注册界面</strong></li>
+</ol>
+<p><img src="/../images/%E7%99%BB%E5%BD%95.png"></p>
+<p><img src="/../images/%E6%B3%A8%E5%86%8C.png"></p>
+<ol>
+<li><strong>论坛主界面</strong></li>
+</ol>
+<p><img src="/../images/%E4%B8%BB%E9%A1%B5%E9%9D%A2.png"></p>
+<ol>
+<li><strong>发帖界面</strong></li>
+</ol>
+<p><img src="/../images/%E5%8F%91%E5%B8%96.png"></p>
+<ol>
+<li><strong>帖子详情与回帖界面</strong></li>
+</ol>
+<p><img src="/../images/%E5%B8%96%E5%AD%90%E8%AF%A6%E6%83%85%E4%B8%8E%E5%9B%9E%E5%B8%96%E7%95%8C%E9%9D%A2.png"></p>
+<ol>
+<li><strong>我的帖子界面</strong></li>
+</ol>
+<p><img src="/../images/%E6%88%91%E7%9A%84%E5%B8%96%E5%AD%90%E9%9D%A2%E6%9D%BF.png"></p>
+<ol>
+<li><strong>管理员界面</strong></li>
+</ol>
+<p><img src="/../images/%E7%AE%A1%E7%90%86%E5%91%98%E9%9D%A2%E6%9D%BF.png"></p>
+<h2 id="六、团队成员负责模块"><a href="#六、团队成员负责模块" class="headerlink" title="六、团队成员负责模块"></a>六、团队成员负责模块</h2><table>
+<thead>
+<tr>
+<th>团队成员</th>
+<th align="left">负责模块</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>沈顺涛</td>
+<td align="left"><code>data</code> 目录下的文件，包括 ForumDataManager.java、User.java、Post.java 等，主要负责数据的管理和持久化。</td>
+</tr>
+<tr>
+<td>李斌</td>
+<td align="left"><code>main</code> 目录下的文件和 <code>ui</code> 包的前四个文件，包括 ForumSystem.java、LoginPanel.java 等，主要负责主程序的启动和部分界面的设计与交互。</td>
+</tr>
+<tr>
+<td>孙睿剀</td>
+<td align="left">ViewPostPanel.java、MyPostsPanel.java、MyRepliesPanel.java、ActivityRankingPanel.java、AdminPanel.java 等，主要负责剩余界面的设计与交互。</td>
+</tr>
+</tbody></table>
+<h2 id="部分核心代码演示"><a href="#部分核心代码演示" class="headerlink" title="部分核心代码演示"></a>部分核心代码演示</h2><ol>
+<li><strong>数据管理器</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">USERS_FILE</span> <span class="operator">=</span> <span class="string">&quot;users.dat&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">POSTS_FILE</span> <span class="operator">=</span> <span class="string">&quot;posts.dat&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;User&gt; users;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Post&gt; posts;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ForumDataManager</span><span class="params">()</span> &#123;</span><br><span class="line">        loadUsers();</span><br><span class="line">        loadPosts();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">loadUsers</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 创建用户信息文件对象</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(USERS_FILE);</span><br><span class="line">        <span class="comment">// 检查文件是否存在</span></span><br><span class="line">        <span class="keyword">if</span> (file.exists()) &#123;</span><br><span class="line">            <span class="keyword">try</span> (<span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(file))) &#123;</span><br><span class="line">                users = (List&lt;User&gt;) ois.readObject();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">                <span class="comment">// 如果读取过程中发生IO错误或类找不到异常，则创建新的用户列表</span></span><br><span class="line">                users = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            users = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">            <span class="comment">// 添加默认管理员</span></span><br><span class="line">            addUser(<span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;admin&quot;</span>, <span class="string">&quot;admin123&quot;</span>, <span class="literal">true</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">loadPosts</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(POSTS_FILE);</span><br><span class="line">        <span class="keyword">if</span> (file.exists()) &#123;</span><br><span class="line">            <span class="keyword">try</span> (<span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(file))) &#123;</span><br><span class="line">                posts = (List&lt;Post&gt;) ois.readObject();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">                posts = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            posts = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>支持双击进入帖子详情</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">postList.addMouseListener(<span class="keyword">new</span> <span class="title class_">MouseAdapter</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">mouseClicked</span><span class="params">(MouseEvent e)</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (e.getClickCount() == <span class="number">2</span>) &#123;</span><br><span class="line">                    <span class="type">Post</span> <span class="variable">selectedPost</span> <span class="operator">=</span> postList.getSelectedValue();</span><br><span class="line">                    <span class="keyword">if</span> (selectedPost != <span class="literal">null</span>) &#123;</span><br><span class="line">                        mainFrame.getViewPostPanel().setPost(selectedPost);</span><br><span class="line">                        mainFrame.showViewPostPanel();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><strong>登录功能核心代码片段</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">loginButton.addActionListener(e -&gt; &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> usernameField.getText();</span><br><span class="line">    <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(passwordField.getPassword());</span><br><span class="line">    <span class="keyword">if</span> (dataManager.validateUser(username, password)) &#123;</span><br><span class="line">        mainFrame.setCurrentUser(dataManager.getUser(username));</span><br><span class="line">        mainFrame.showForumPanel();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;用户名或密码错误！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li><strong>注册功能核心代码片段</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> usernameField.getText();</span><br><span class="line">        <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(passwordField.getPassword());</span><br><span class="line">        <span class="type">String</span> <span class="variable">confirmPassword</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(confirmPasswordField.getPassword());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (username.isEmpty() || password.isEmpty()) &#123;</span><br><span class="line">            JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;用户名和密码不能为空！&quot;</span>, <span class="string">&quot;注册失败&quot;</span>, JOptionPane.ERROR_MESSAGE);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!password.equals(confirmPassword)) &#123;</span><br><span class="line">            JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;两次输入的密码不一致！&quot;</span>, <span class="string">&quot;注册失败&quot;</span>, JOptionPane.ERROR_MESSAGE);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dataManager.getUser(username) != <span class="literal">null</span>) &#123;</span><br><span class="line">            JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;用户名已存在！&quot;</span>, <span class="string">&quot;注册失败&quot;</span>, JOptionPane.ERROR_MESSAGE);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        dataManager.addUser(<span class="keyword">new</span> <span class="title class_">User</span>(username, password, <span class="literal">false</span>));</span><br><span class="line">        JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;注册成功！请登录&quot;</span>);</span><br><span class="line">        mainFrame.showLoginPanel();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="5">
+<li><strong>我的回帖功能核心代码</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">loginButton.addActionListener(e -&gt; &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> usernameField.getText();</span><br><span class="line">    <span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(passwordField.getPassword());</span><br><span class="line">    <span class="keyword">if</span> (dataManager.validateUser(username, password)) &#123;</span><br><span class="line">        mainFrame.setCurrentUser(dataManager.getUser(username));</span><br><span class="line">        mainFrame.showForumPanel();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        JOptionPane.showMessageDialog(<span class="built_in">this</span>, <span class="string">&quot;用户名或密码错误！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><strong>活跃度排行功能核心代码</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 获取用户活跃度排名</span></span><br><span class="line"><span class="comment">    * </span></span><br><span class="line"><span class="comment">    * 本方法通过计算用户发帖和回帖数量之和来衡量用户的活跃度，并返回按照活跃度降序排列的用户排名</span></span><br><span class="line"><span class="comment">    * 使用了HashMap来存储用户及其活跃度，然后通过Stream API进行排序和重新收集，以确保最终结果是按照活跃度降序排列的</span></span><br><span class="line"><span class="comment">    * </span></span><br><span class="line"><span class="comment">    * 返回一个映射，键是用户名，值是用户的活跃度（发帖数加回帖数），按照活跃度降序排列</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">public</span> Map&lt;String, Integer&gt; <span class="title function_">getActivityRanking</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 初始化一个HashMap来存储用户及其活跃度</span></span><br><span class="line">        Map&lt;String, Integer&gt; ranking = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 遍历用户列表，计算每个用户的活跃度，并存入Map中</span></span><br><span class="line">        <span class="keyword">for</span> (User user : users) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">activity</span> <span class="operator">=</span> user.getPostCount() + user.getReplyCount();</span><br><span class="line">            ranking.put(user.getUsername(), activity);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 使用Stream API对Map中的用户活跃度进行降序排序，并收集到一个新的LinkedHashMap中，以保持顺序</span></span><br><span class="line">        <span class="keyword">return</span> ranking.entrySet().stream()</span><br><span class="line">                .sorted(Map.Entry.&lt;String, Integer&gt;comparingByValue().reversed())</span><br><span class="line">                .collect(Collectors.toMap(</span><br><span class="line">                        Map.Entry::getKey,</span><br><span class="line">                        Map.Entry::getValue,</span><br><span class="line">                        (e1, e2) -&gt; e1,</span><br><span class="line">                        LinkedHashMap::<span class="keyword">new</span>));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="七、项目-git-地址"><a href="#七、项目-git-地址" class="headerlink" title="七、项目 git 地址"></a>七、项目 git 地址</h2><p>项目的 Git 仓库地址为：<a target="_blank" rel="noopener" href="https://github.com/Scienmicroit/ForumSystem">https://github.com/Scienmicroit/ForumSystem</a></p>
+<h2 id="八、部署与运行指南"><a href="#八、部署与运行指南" class="headerlink" title="八、部署与运行指南"></a>八、部署与运行指南</h2><h3 id="8-1-环境要求"><a href="#8-1-环境要求" class="headerlink" title="8.1 环境要求"></a>8.1 环境要求</h3><ul>
+<li>JDK 11+（推荐 JDK 17，项目开发环境）</li>
+<li>IDE：IntelliJ IDEA 或 Eclipse</li>
+<li>操作系统：Windows&#x2F;macOS&#x2F;Linux（Swing 跨平台支持）</li>
+</ul>
+<h3 id="8-2-运行步骤"><a href="#8-2-运行步骤" class="headerlink" title="8.2 运行步骤"></a>8.2 运行步骤</h3><ol>
+<li>克隆项目：<code>git clone https://github.com/Scienmicroit/ForumSystem.git</code></li>
+<li>导入 IDE，配置 JDK 环境</li>
+<li>运行主类：<code>src.main.ForumSystem</code></li>
+<li>初始账号：<code>admin</code> &#x2F; <code>admin123</code>（管理员权限）</li>
+</ol>
+<h3 id="8-3-常见问题"><a href="#8-3-常见问题" class="headerlink" title="8.3 常见问题"></a>8.3 常见问题</h3><ol>
+<li><strong>启动报错</strong>：确认 JDK 版本匹配，检查<code>src</code>目录结构是否正确</li>
+<li><strong>数据丢失</strong>：确保项目根目录有读写权限，程序会自动生成<code>users.dat</code>和<code>posts.dat</code></li>
+<li><strong>界面卡顿</strong>：若帖子数量过多，可修改<code>ForumDataManager</code>的加载逻辑，实现分批加载</li>
+</ol>
+<h2 id="九、总结与改进"><a href="#九、总结与改进" class="headerlink" title="九、总结与改进"></a>九、总结与改进</h2><h3 id="收获与不足"><a href="#收获与不足" class="headerlink" title="收获与不足"></a>收获与不足</h3><h4 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h4><ul>
+<li><p><strong>Swing高级应用</strong>：掌握了CardLayout布局管理、JTable数据绑定等高级GUI技术</p>
+</li>
+<li><p><strong>文件I&#x2F;O操作</strong>：实践了对象序列化和反序列化技术</p>
+</li>
+<li><p><strong>OOP设计原则</strong>：深入理解了单一职责、开闭原则等面向对象设计理念</p>
+</li>
+<li><p><strong>团队协作开发</strong>：熟练使用Git进行版本控制和团队协作</p>
+</li>
+</ul>
+<h4 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h4><ul>
+<li>未使用数据库存储文件,数据量大时使用操作受限</li>
+<li>未使用网络功能,用户只能在本地进行发帖回帖</li>
+<li>登录注册安全机制简单,没有对密码进行加密</li>
+</ul>
+<h4 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a>优化方向</h4><ul>
+<li>数据库存储升级,网络功能实现,安全机制强化 </li>
+<li>及时通知功能:新回复桌面通知,点赞实时更新</li>
+<li>高级搜素功能:帖子标题&#x2F;内容关键词搜索,作者帖子检索</li>
+</ul>
+<h2 id="十、团队成员-git-提交记录截图"><a href="#十、团队成员-git-提交记录截图" class="headerlink" title="十、团队成员 git 提交记录截图"></a>十、团队成员 git 提交记录截图</h2><p><img src="/../images/git.png"></p>
+<p><img src="/../images/git2.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Jasper Orion</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/">http://example.com/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Debugging</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/Hollow%20Knight.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/04/27/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="git的基本使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">git的基本使用</div></div><div class="info-2"><div class="info-item-1">1. 仓库初始化 &amp; 克隆 git init初始化当前目录为 Git 仓库。 git clone &lt;远程仓库地址&gt;克隆远程仓库到本地（默认克隆主分支）。   2. 基础操作 git add &lt;文件名&gt;将文件添加到暂存区（Stage）。 git add .添加当前目录下所有修改的文件到暂存区。 git commit -m &quot;提交说明&quot;提交暂存区的修改到本地仓库。 git commit --amend修改最近一次提交的说明或内容（未推送到远程时可用）。   3. 分支管理 git branch查看本地所有分支（当前分支前有 * 号）。 git branch &lt;分支名&gt;创建新分支。 git checkout &lt;分支名&gt;切换到指定分支。 git checkout -b &lt;新分支名&gt;创建并切换到新分支（常用快捷操作）。 git merge &lt;分支名&gt;将指定分支合并到当前分支。 git branch -d &lt;分支名&gt;删除本地分支（需先切换到其他分支）。 git branch -D...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/Hollow%20Knight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Jasper Orion</div><div class="author-info-description">这里没有描述</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JasperOrion"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:536584667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EJava-Swing%E7%9A%84%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">基于Java Swing的简易论坛系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、项目简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">二、技术架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 核心技术栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2架构设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E8%AF%A6%E8%A7%A3%EF%BC%9A%E4%BB%8E%E7%94%A8%E6%88%B7%E5%88%B0%E7%AE%A1%E7%90%86%E5%91%98"><span class="toc-number">1.3.</span> <span class="toc-text">三、功能模块详解：从用户到管理员</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 功能需求分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%85%B8%E5%9E%8B%E5%8A%9F%E8%83%BD%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 典型功能流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E5%8F%91%E5%B8%96%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">3.2.1 发帖流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E7%AE%A1%E7%90%86%E5%91%98%E7%BD%AE%E9%A1%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">3.2.2 管理员置顶操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%A1%B9%E7%9B%AE%E4%BA%AE%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">四、项目亮点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA%E6%93%8D%E4%BD%9C%E8%A7%86%E9%A2%91%E6%88%96%E8%80%85%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD%E6%88%AA%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">五、系统演示操作视频或者主要功能截图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%9B%A2%E9%98%9F%E6%88%90%E5%91%98%E8%B4%9F%E8%B4%A3%E6%A8%A1%E5%9D%97"><span class="toc-number">1.6.</span> <span class="toc-text">六、团队成员负责模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%88%86%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="toc-number">1.7.</span> <span class="toc-text">部分核心代码演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%A1%B9%E7%9B%AE-git-%E5%9C%B0%E5%9D%80"><span class="toc-number">1.8.</span> <span class="toc-text">七、项目 git 地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E8%A1%8C%E6%8C%87%E5%8D%97"><span class="toc-number">1.9.</span> <span class="toc-text">八、部署与运行指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-number">1.9.1.</span> <span class="toc-text">8.1 环境要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E8%BF%90%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.9.2.</span> <span class="toc-text">8.2 运行步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.9.3.</span> <span class="toc-text">8.3 常见问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="toc-number">1.10.</span> <span class="toc-text">九、总结与改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B6%E8%8E%B7%E4%B8%8E%E4%B8%8D%E8%B6%B3"><span class="toc-number">1.10.1.</span> <span class="toc-text">收获与不足</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B6%E8%8E%B7"><span class="toc-number">1.10.1.1.</span> <span class="toc-text">收获</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E8%B6%B3"><span class="toc-number">1.10.1.2.</span> <span class="toc-text">不足</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E5%90%91"><span class="toc-number">1.10.1.3.</span> <span class="toc-text">优化方向</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E5%9B%A2%E9%98%9F%E6%88%90%E5%91%98-git-%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95%E6%88%AA%E5%9B%BE"><span class="toc-number">1.11.</span> <span class="toc-text">十、团队成员 git 提交记录截图</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/19/%E7%AE%80%E6%98%93%E8%AE%BA%E5%9D%9B%E7%B3%BB%E7%BB%9F/" title="简易论坛系统">简易论坛系统</a><time datetime="2025-06-19T07:44:11.000Z" title="发表于 2025-06-19 15:44:11">2025-06-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/27/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="git的基本使用">git的基本使用</a><time datetime="2025-04-27T09:24:49.000Z" title="发表于 2025-04-27 17:24:49">2025-04-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/25/hello-world/" title="Hello World">Hello World</a><time datetime="2025-04-25T14:38:01.402Z" title="发表于 2025-04-25 22:38:01">2025-04-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Jasper Orion</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
