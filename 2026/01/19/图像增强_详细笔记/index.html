@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图像增强 — 完整教学笔记 | Error' blog</title><meta name="author" content="Jasper Orion,536584667@qq.com"><meta name="copyright" content="Jasper Orion"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="图像增强 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第二章Python 3.12 + OpenCV + NumPy + Matplotlib   一、图像增强概述1.1 针对什么问题   问题 表现    对比度不足 图像偏暗&#x2F;偏亮或灰度集中于狭窄区间   噪声干扰 传感器&#x2F;传输噪声导致质量下降   边缘模糊 成像系统对焦不准导致边界不清晰   动态范围不合理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像增强 — 完整教学笔记">
+<meta property="og:url" content="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Error&#39; blog">
+<meta property="og:description" content="图像增强 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第二章Python 3.12 + OpenCV + NumPy + Matplotlib   一、图像增强概述1.1 针对什么问题   问题 表现    对比度不足 图像偏暗&#x2F;偏亮或灰度集中于狭窄区间   噪声干扰 传感器&#x2F;传输噪声导致质量下降   边缘模糊 成像系统对焦不准导致边界不清晰   动态范围不合理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/uploads/HollowKnight.png">
+<meta property="article:published_time" content="2026-01-19T01:30:00.000Z">
+<meta property="article:modified_time" content="2026-01-19T01:30:00.000Z">
+<meta property="article:author" content="Jasper Orion">
+<meta property="article:tag" content="图像处理 灰度变换 直方图均衡化 平滑滤波 锐化滤波 同态滤波">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/uploads/HollowKnight.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "图像增强 — 完整教学笔记",
+  "url": "http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/",
+  "image": "http://example.com/uploads/HollowKnight.png",
+  "datePublished": "2026-01-19T01:30:00.000Z",
+  "dateModified": "2026-01-19T01:30:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jasper Orion",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '图像增强 — 完整教学笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/uploads/HollowKnight.png" alt="Logo"><span class="site-name">Error' blog</span></a><a class="nav-page-title" href="/"><span class="site-name">图像增强 — 完整教学笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">图像增强 — 完整教学笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-19T01:30:00.000Z" title="发表于 2026-01-19 09:30:00">2026-01-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-19T01:30:00.000Z" title="更新于 2026-01-19 09:30:00">2026-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">数字图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="图像增强-—-完整教学笔记（含代码）"><a href="#图像增强-—-完整教学笔记（含代码）" class="headerlink" title="图像增强 — 完整教学笔记（含代码）"></a>图像增强 — 完整教学笔记（含代码）</h1><blockquote>
+<p>《数字图像处理》教学笔记 · 第二章<br>Python 3.12 + OpenCV + NumPy + Matplotlib</p>
+</blockquote>
+<hr>
+<h2 id="一、图像增强概述"><a href="#一、图像增强概述" class="headerlink" title="一、图像增强概述"></a>一、图像增强概述</h2><h3 id="1-1-针对什么问题"><a href="#1-1-针对什么问题" class="headerlink" title="1.1 针对什么问题"></a>1.1 针对什么问题</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对比度不足</td>
+<td>图像偏暗&#x2F;偏亮或灰度集中于狭窄区间</td>
+</tr>
+<tr>
+<td>噪声干扰</td>
+<td>传感器&#x2F;传输噪声导致质量下降</td>
+</tr>
+<tr>
+<td>边缘模糊</td>
+<td>成像系统对焦不准导致边界不清晰</td>
+</tr>
+<tr>
+<td>动态范围不合理</td>
+<td>暗部过暗或亮部过亮</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-核心思想"><a href="#1-2-核心思想" class="headerlink" title="1.2 核心思想"></a>1.2 核心思想</h3><blockquote>
+<p><strong>“有选择地突出有用信息，抑制无用信息”</strong>——拉伸对比度、修正灰度分布、选择性增强。</p>
+</blockquote>
+<h3 id="1-3-分类"><a href="#1-3-分类" class="headerlink" title="1.3 分类"></a>1.3 分类</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">图像增强</span><br><span class="line">├── 空间域增强</span><br><span class="line">│   ├── 点运算（灰度变换、直方图）</span><br><span class="line">│   └── 邻域增强（平滑滤波、锐化滤波）</span><br><span class="line">└── 频域增强</span><br><span class="line">    ├── 低通滤波 → 去噪/平滑</span><br><span class="line">    ├── 高通滤波 → 锐化/边缘</span><br><span class="line">    ├── 带阻/陷波 → 去周期噪声</span><br><span class="line">    └── 同态滤波 → 光照校正</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、直接灰度变换法"><a href="#二、直接灰度变换法" class="headerlink" title="二、直接灰度变换法"></a>二、直接灰度变换法</h2><h3 id="2-1-全段线性变换"><a href="#2-1-全段线性变换" class="headerlink" title="2.1 全段线性变换"></a>2.1 全段线性变换</h3><p>$$g(x,y) &#x3D; a \cdot f(x,y) + b$$</p>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>效果</th>
+<th>b</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&gt;1</td>
+<td>对比度增强</td>
+<td>&gt;0</td>
+<td>整体变亮</td>
+</tr>
+<tr>
+<td>0~1</td>
+<td>对比度减弱</td>
+<td>&lt;0</td>
+<td>整体变暗</td>
+</tr>
+<tr>
+<td>&lt;0</td>
+<td>灰度反转</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2, numpy <span class="keyword">as</span> np, matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Microsoft YaHei&#x27;</span>]</span><br><span class="line"></span><br><span class="line">img = cv2.imread(<span class="string">&#x27;s1.png&#x27;</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">linear_transform</span>(<span class="params">img, a=<span class="number">1.0</span>, b=<span class="number">0</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;全段线性变换: g = a * f + b&quot;&quot;&quot;</span></span><br><span class="line">    result = a * img.astype(np.float32) + b</span><br><span class="line">    <span class="keyword">return</span> np.clip(result, <span class="number">0</span>, <span class="number">255</span>).astype(np.uint8)</span><br><span class="line"></span><br><span class="line">img_enhance = linear_transform(img, a=<span class="number">1.5</span>, b=-<span class="number">20</span>)   <span class="comment"># 对比度增强</span></span><br><span class="line">img_reduce  = linear_transform(img, a=<span class="number">0.6</span>, b=<span class="number">40</span>)    <span class="comment"># 对比度减弱+变亮</span></span><br><span class="line">img_inverse = linear_transform(img, a=-<span class="number">1</span>, b=<span class="number">255</span>)    <span class="comment"># 灰度反转</span></span><br><span class="line"></span><br><span class="line">fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">4</span>, figsize=(<span class="number">16</span>, <span class="number">4</span>))</span><br><span class="line"><span class="keyword">for</span> ax, (im, t) <span class="keyword">in</span> <span class="built_in">zip</span>(axes, [(img,<span class="string">&#x27;原图&#x27;</span>),(img_enhance,<span class="string">&#x27;a=1.5,b=-20&#x27;</span>),</span><br><span class="line">    (img_reduce,<span class="string">&#x27;a=0.6,b=40&#x27;</span>),(img_inverse,<span class="string">&#x27;a=-1,b=255&#x27;</span>)]):</span><br><span class="line">    ax.imshow(im, cmap=<span class="string">&#x27;gray&#x27;</span>); ax.set_title(t); ax.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-分段线性变换"><a href="#2-2-分段线性变换" class="headerlink" title="2.2 分段线性变换"></a>2.2 分段线性变换</h3><p><strong>核心思想：”区别对待”</strong>——不同灰度区间使用不同斜率。</p>
+<p>$$g(f) &#x3D; \begin{cases} a_1 f + b_1 &amp; 0 \leq f &lt; k_1 \ a_2 f + b_2 &amp; k_1 \leq f &lt; k_2 \ a_3 f + b_3 &amp; k_2 \leq f \leq 255 \end{cases}$$</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>做法</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分段拉伸</td>
+<td>感兴趣区间 a&gt;1, 其余 a&lt;1</td>
+<td>突出目标区域</td>
+</tr>
+<tr>
+<td>分段抑制</td>
+<td>某段 a≈0（压平）</td>
+<td>消除背景变化</td>
+</tr>
+<tr>
+<td>灰度切割</td>
+<td>某段→255, 其余→0（或保留）</td>
+<td>突出特定灰度</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">piecewise_linear</span>(<span class="params">img, breakpoints, slopes, intercepts=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;分段线性变换&quot;&quot;&quot;</span></span><br><span class="line">    result = np.zeros_like(img, dtype=np.float32)</span><br><span class="line">    f = img.astype(np.float32)</span><br><span class="line">    <span class="keyword">if</span> intercepts <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        intercepts = [<span class="number">0</span>] * <span class="built_in">len</span>(slopes)</span><br><span class="line">    prev_k = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, k <span class="keyword">in</span> <span class="built_in">enumerate</span>(breakpoints + [<span class="number">256</span>]):</span><br><span class="line">        mask = (f &gt;= prev_k) &amp; (f &lt; k)</span><br><span class="line">        result[mask] = slopes[i] * f[mask] + intercepts[i]</span><br><span class="line">        prev_k = k</span><br><span class="line">    <span class="keyword">return</span> np.clip(result, <span class="number">0</span>, <span class="number">255</span>).astype(np.uint8)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分段拉伸: 中间段 [60,180] 斜率 2.0</span></span><br><span class="line">img_stretch = piecewise_linear(img, breakpoints=[<span class="number">60</span>,<span class="number">180</span>], slopes=[<span class="number">0.5</span>, <span class="number">2.0</span>, <span class="number">0.3</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分段抑制: 中间段 [80,150] 斜率 0 → 压平为常数</span></span><br><span class="line">img_suppress = piecewise_linear(img, breakpoints=[<span class="number">80</span>,<span class="number">150</span>], slopes=[<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>],</span><br><span class="line">                                 intercepts=[<span class="number">0</span>, <span class="number">80</span>, -<span class="number">70</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 灰度切割: 150-200 → 白, 其余 → 黑</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gray_level_slicing</span>(<span class="params">img, low, high, keep_bg=<span class="literal">False</span></span>):</span><br><span class="line">    result = img.copy() <span class="keyword">if</span> keep_bg <span class="keyword">else</span> np.zeros_like(img)</span><br><span class="line">    result[(img &gt;= low) &amp; (img &lt;= high)] = <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">img_slice = gray_level_slicing(img, <span class="number">150</span>, <span class="number">200</span>, keep_bg=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=(<span class="number">14</span>, <span class="number">4</span>))</span><br><span class="line"><span class="keyword">for</span> ax, (im, t) <span class="keyword">in</span> <span class="built_in">zip</span>(axes, [(img_stretch,<span class="string">&#x27;分段拉伸&#x27;</span>),(img_suppress,<span class="string">&#x27;分段抑制&#x27;</span>),(img_slice,<span class="string">&#x27;灰度切割&#x27;</span>)]):</span><br><span class="line">    ax.imshow(im, cmap=<span class="string">&#x27;gray&#x27;</span>); ax.set_title(t); ax.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-非线性变换"><a href="#2-3-非线性变换" class="headerlink" title="2.3 非线性变换"></a>2.3 非线性变换</h3><h4 id="对数变换"><a href="#对数变换" class="headerlink" title="对数变换"></a>对数变换</h4><p>$$g(x,y) &#x3D; c \cdot \log(1 + f(x,y))$$</p>
+<ul>
+<li>暗部导数大 → <strong>显著拉伸暗部</strong>；亮部导数小 → <strong>压缩亮部</strong></li>
+<li>适合：过暗图像、傅里叶频谱可视化</li>
+</ul>
+<h4 id="Gamma-校正"><a href="#Gamma-校正" class="headerlink" title="Gamma 校正"></a>Gamma 校正</h4><p>$$g(x,y) &#x3D; c \cdot [f(x,y)]^\gamma$$</p>
+<table>
+<thead>
+<tr>
+<th>γ</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>γ&lt;1</td>
+<td>拉伸暗部、压缩亮部</td>
+</tr>
+<tr>
+<td>γ&gt;1</td>
+<td>压缩暗部、拉伸亮部</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>CRT 显示器输入-输出呈 γ≈2.2 的幂律关系，需预先施加 1&#x2F;γ 校正。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">log_transform</span>(<span class="params">img, c=<span class="number">1.0</span></span>):</span><br><span class="line">    f = img.astype(np.float32) + <span class="number">1</span></span><br><span class="line">    result = c * np.log(f)</span><br><span class="line">    <span class="keyword">return</span> (result / result.<span class="built_in">max</span>() * <span class="number">255</span>).astype(np.uint8)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gamma_transform</span>(<span class="params">img, gamma=<span class="number">1.0</span>, c=<span class="number">1.0</span></span>):</span><br><span class="line">    f = img.astype(np.float32) / <span class="number">255.0</span></span><br><span class="line">    result = c * np.power(f, gamma) * <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> np.clip(result, <span class="number">0</span>, <span class="number">255</span>).astype(np.uint8)</span><br><span class="line"></span><br><span class="line">img_log   = log_transform(img)</span><br><span class="line">img_gamma_04 = gamma_transform(img, gamma=<span class="number">0.4</span>)   <span class="comment"># 暗部提亮</span></span><br><span class="line">img_gamma_25 = gamma_transform(img, gamma=<span class="number">2.5</span>)   <span class="comment"># 亮部拉伸</span></span><br><span class="line"></span><br><span class="line">fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=(<span class="number">14</span>, <span class="number">4</span>))</span><br><span class="line"><span class="keyword">for</span> ax, (im, t) <span class="keyword">in</span> <span class="built_in">zip</span>(axes, [(img_log,<span class="string">&#x27;对数变换&#x27;</span>),(img_gamma_04,<span class="string">&#x27;γ=0.4&#x27;</span>),(img_gamma_25,<span class="string">&#x27;γ=2.5&#x27;</span>)]):</span><br><span class="line">    ax.imshow(im, cmap=<span class="string">&#x27;gray&#x27;</span>); ax.set_title(t); ax.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、直方图均衡化"><a href="#三、直方图均衡化" class="headerlink" title="三、直方图均衡化"></a>三、直方图均衡化</h2><h3 id="3-1-原理"><a href="#3-1-原理" class="headerlink" title="3.1 原理"></a>3.1 原理</h3><p>将原始直方图变换为均匀分布，自动增强对比度。</p>
+<p><strong>离散公式：</strong></p>
+<p>$$s_k &#x3D; \sum_{j&#x3D;0}^{k} \frac{n_j}{MN}, \quad g_k &#x3D; \text{round}(s_k \times 255)$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">hist_equalize</span>(<span class="params">img</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;直方图均衡化 — 手写实现&quot;&quot;&quot;</span></span><br><span class="line">    hist = np.zeros(<span class="number">256</span>, dtype=np.float32)</span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> img.ravel():</span><br><span class="line">        hist[v] += <span class="number">1</span></span><br><span class="line">    hist /= img.size                    <span class="comment"># 归一化</span></span><br><span class="line">    cdf = np.cumsum(hist)               <span class="comment"># 累积分布</span></span><br><span class="line">    mapping = np.<span class="built_in">round</span>(cdf * <span class="number">255</span>).astype(np.uint8)  <span class="comment"># 映射函数</span></span><br><span class="line">    <span class="keyword">return</span> mapping[img]                 <span class="comment"># 查表应用</span></span><br><span class="line"></span><br><span class="line">img_eq = hist_equalize(img)</span><br><span class="line">img_eq_cv = cv2.equalizeHist(img)       <span class="comment"># OpenCV 对比</span></span><br><span class="line"></span><br><span class="line">fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">3</span>, figsize=(<span class="number">14</span>, <span class="number">4</span>))</span><br><span class="line">axes[<span class="number">0</span>].hist(img.ravel(), bins=<span class="number">256</span>, <span class="built_in">range</span>=(<span class="number">0</span>,<span class="number">255</span>), density=<span class="literal">True</span>)</span><br><span class="line">axes[<span class="number">0</span>].set_title(<span class="string">&#x27;原图直方图&#x27;</span>)</span><br><span class="line">axes[<span class="number">1</span>].hist(img_eq.ravel(), bins=<span class="number">256</span>, <span class="built_in">range</span>=(<span class="number">0</span>,<span class="number">255</span>), density=<span class="literal">True</span>)</span><br><span class="line">axes[<span class="number">1</span>].set_title(<span class="string">&#x27;均衡化后直方图&#x27;</span>)</span><br><span class="line">axes[<span class="number">2</span>].imshow(img_eq, cmap=<span class="string">&#x27;gray&#x27;</span>); axes[<span class="number">2</span>].set_title(<span class="string">&#x27;均衡化结果&#x27;</span>); axes[<span class="number">2</span>].axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><strong>量化证据：</strong> 灰度范围从 [0,215] 扩展到 [0,255]，标准差从 45.7→71.3。</p>
+<hr>
+<h2 id="四、邻域增强"><a href="#四、邻域增强" class="headerlink" title="四、邻域增强"></a>四、邻域增强</h2><h3 id="4-1-平滑滤波"><a href="#4-1-平滑滤波" class="headerlink" title="4.1 平滑滤波"></a>4.1 平滑滤波</h3><p><strong>卷积公式：</strong> $$g(x,y) &#x3D; \sum_{i&#x3D;-a}^{a}\sum_{j&#x3D;-b}^{b} w(i,j),f(x+i,y+j)$$</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>均值滤波</td>
+<td>3×3 平均核</td>
+<td>去高斯噪声，但模糊边缘</td>
+</tr>
+<tr>
+<td>中值滤波</td>
+<td>邻域中值</td>
+<td>去椒盐噪声，保留边缘</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-锐化滤波"><a href="#4-2-锐化滤波" class="headerlink" title="4.2 锐化滤波"></a>4.2 锐化滤波</h3><p><strong>Sobel 算子（一阶微分）：</strong></p>
+<p>$$G_x &#x3D; \begin{bmatrix}-1&amp;0&amp;1\-2&amp;0&amp;2\-1&amp;0&amp;1\end{bmatrix}, \quad G_y &#x3D; \begin{bmatrix}-1&amp;-2&amp;-1\0&amp;0&amp;0\1&amp;2&amp;1\end{bmatrix}$$</p>
+<p>$$|\nabla f| &#x3D; \sqrt{G_x^2 + G_y^2}$$</p>
+<p><strong>拉普拉斯算子（二阶微分）：</strong> $\nabla^2 f$ 零交叉处为边缘。</p>
+<p><strong>锐化公式：</strong> $$g(x,y) &#x3D; f(x,y) - \nabla^2 f(x,y)$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sobel 边缘检测</span></span><br><span class="line">sobel_x = cv2.Sobel(img, cv2.CV_64F, <span class="number">1</span>, <span class="number">0</span>, ksize=<span class="number">3</span>)</span><br><span class="line">sobel_y = cv2.Sobel(img, cv2.CV_64F, <span class="number">0</span>, <span class="number">1</span>, ksize=<span class="number">3</span>)</span><br><span class="line">sobel_mag = cv2.magnitude(sobel_x, sobel_y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Laplacian 锐化</span></span><br><span class="line">laplacian = cv2.Laplacian(img, cv2.CV_64F, ksize=<span class="number">3</span>)</span><br><span class="line">sharpened = cv2.convertScaleAbs(img.astype(<span class="built_in">float</span>) - laplacian)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、频域增强"><a href="#五、频域增强" class="headerlink" title="五、频域增强"></a>五、频域增强</h2><h3 id="5-1-基本流程"><a href="#5-1-基本流程" class="headerlink" title="5.1 基本流程"></a>5.1 基本流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(x,y) → DFT → F(u,v) → 滤波器 H(u,v) → G(u,v) → IDFT → g(x,y)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-低通滤波"><a href="#5-2-低通滤波" class="headerlink" title="5.2 低通滤波"></a>5.2 低通滤波</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>公式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>理想低通</td>
+<td>H&#x3D;1 if D≤D₀ else 0</td>
+<td>振铃明显</td>
+</tr>
+<tr>
+<td>巴特沃斯</td>
+<td>H&#x3D;1&#x2F;[1+(D&#x2F;D₀)^(2n)]</td>
+<td>过渡可控</td>
+</tr>
+<tr>
+<td><strong>高斯低通</strong></td>
+<td>H&#x3D;e^(-D²&#x2F;2D₀²)</td>
+<td><strong>无振铃，最常用</strong></td>
+</tr>
+</tbody></table>
+<h3 id="5-3-高通滤波"><a href="#5-3-高通滤波" class="headerlink" title="5.3 高通滤波"></a>5.3 高通滤波</h3><p>$$H_{HP}(u,v) &#x3D; 1 - H_{LP}(u,v)$$</p>
+<p>去掉直流分量后图像变暗，需加回直流或后处理拉伸。</p>
+<p><strong>高频提升：</strong> $$H_{eff} &#x3D; A + (1-A) \cdot H_{HP}$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">build_lpf</span>(<span class="params">shape, D0, filter_type=<span class="string">&#x27;gaussian&#x27;</span>, n=<span class="number">2</span></span>):</span><br><span class="line">    h, w = shape</span><br><span class="line">    u = np.arange(h) - h//<span class="number">2</span>; v = np.arange(w) - w//<span class="number">2</span></span><br><span class="line">    U, V = np.meshgrid(v, u)</span><br><span class="line">    D = np.sqrt(U**<span class="number">2</span> + V**<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">if</span> filter_type == <span class="string">&#x27;gaussian&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> np.exp(-D**<span class="number">2</span> / (<span class="number">2</span> * D0**<span class="number">2</span>))</span><br><span class="line">    <span class="keyword">elif</span> filter_type == <span class="string">&#x27;butterworth&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1.0</span> / (<span class="number">1</span> + (D / (D0 + <span class="number">1e-6</span>))**(<span class="number">2</span>*n))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">apply_filter</span>(<span class="params">img, H</span>):</span><br><span class="line">    f = np.fft.fft2(img)</span><br><span class="line">    fshift = np.fft.fftshift(f)</span><br><span class="line">    result = np.fft.ifft2(np.fft.ifftshift(fshift * H))</span><br><span class="line">    <span class="keyword">return</span> np.clip(np.real(result), <span class="number">0</span>, <span class="number">255</span>).astype(np.uint8)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例</span></span><br><span class="line">img_float = img.astype(np.float32)</span><br><span class="line">H_low = build_lpf(img.shape, D0=<span class="number">50</span>, filter_type=<span class="string">&#x27;gaussian&#x27;</span>)</span><br><span class="line">H_high = <span class="number">1</span> - H_low   <span class="comment"># 高通 = 1 - 低通</span></span><br><span class="line">img_lpf = apply_filter(img_float, H_low)    <span class="comment"># 平滑</span></span><br><span class="line">img_hpf = apply_filter(img_float, H_high)   <span class="comment"># 锐化（需拉伸对比度）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-陷波滤波（去周期性噪声）"><a href="#5-4-陷波滤波（去周期性噪声）" class="headerlink" title="5.4 陷波滤波（去周期性噪声）"></a>5.4 陷波滤波（去周期性噪声）</h3><p>周期性噪声在频谱中表现为<strong>对称亮点对</strong>，陷波滤波精确抑制这些点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">build_notch_filter</span>(<span class="params">shape, notch_centers, radius=<span class="number">5</span></span>):</span><br><span class="line">    h, w = shape</span><br><span class="line">    u = np.arange(h) - h//<span class="number">2</span>; v = np.arange(w) - w//<span class="number">2</span></span><br><span class="line">    U, V = np.meshgrid(v, u)</span><br><span class="line">    H = np.ones((h, w), dtype=np.float32)</span><br><span class="line">    <span class="keyword">for</span> cy, cx <span class="keyword">in</span> notch_centers:</span><br><span class="line">        D1 = np.sqrt((U-cx)**<span class="number">2</span> + (V-cy)**<span class="number">2</span>)</span><br><span class="line">        D2 = np.sqrt((U+cx)**<span class="number">2</span> + (V+cy)**<span class="number">2</span>)</span><br><span class="line">        H *= (<span class="number">1</span> - np.exp(-D1**<span class="number">2</span>/(<span class="number">2</span>*radius**<span class="number">2</span>)))</span><br><span class="line">        H *= (<span class="number">1</span> - np.exp(-D2**<span class="number">2</span>/(<span class="number">2</span>*radius**<span class="number">2</span>)))</span><br><span class="line">    <span class="keyword">return</span> H</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-同态滤波（去光照不均）"><a href="#5-5-同态滤波（去光照不均）" class="headerlink" title="5.5 同态滤波（去光照不均）"></a>5.5 同态滤波（去光照不均）</h3><p>图像模型：$$f(x,y) &#x3D; i(x,y) \times r(x,y)$$</p>
+<table>
+<thead>
+<tr>
+<th>分量</th>
+<th>物理意义</th>
+<th>频率</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i(x,y)</td>
+<td>光照</td>
+<td>低频</td>
+<td>压缩</td>
+</tr>
+<tr>
+<td>r(x,y)</td>
+<td>反射</td>
+<td>高频</td>
+<td>增强</td>
+</tr>
+</tbody></table>
+<p><strong>流程：</strong> $$\ln \rightarrow DFT \rightarrow H(u,v) \rightarrow IDFT \rightarrow \exp$$</p>
+<p><strong>同态滤波器：</strong> $$H(u,v) &#x3D; (\gamma_H - \gamma_L) \cdot [1 - e^{-D^2&#x2F;2\sigma^2}] + \gamma_L$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">homomorphic_filter</span>(<span class="params">img, gamma_l=<span class="number">0.3</span>, gamma_h=<span class="number">2.0</span>, sigma=<span class="number">40</span></span>):</span><br><span class="line">    img_log = np.log(img.astype(np.float32) + <span class="number">1</span>)</span><br><span class="line">    f = np.fft.fft2(img_log); fshift = np.fft.fftshift(f)</span><br><span class="line">    h, w = img.shape</span><br><span class="line">    u = np.arange(h) - h//<span class="number">2</span>; v = np.arange(w) - w//<span class="number">2</span></span><br><span class="line">    U, V = np.meshgrid(v, u); D = np.sqrt(U**<span class="number">2</span> + V**<span class="number">2</span>)</span><br><span class="line">    H = (gamma_h - gamma_l) * (<span class="number">1</span> - np.exp(-D**<span class="number">2</span>/(<span class="number">2</span>*sigma**<span class="number">2</span>))) + gamma_l</span><br><span class="line">    filtered = np.real(np.fft.ifft2(np.fft.ifftshift(fshift * H)))</span><br><span class="line">    result = np.exp(filtered) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> np.clip((result-result.<span class="built_in">min</span>())/(result.<span class="built_in">max</span>()-result.<span class="built_in">min</span>())*<span class="number">255</span>, <span class="number">0</span>, <span class="number">255</span>).astype(np.uint8)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><h3 id="核心原则"><a href="#核心原则" class="headerlink" title="核心原则"></a>核心原则</h3><table>
+<thead>
+<tr>
+<th>原则</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>有得必有失</td>
+<td>拉伸一个区间必然压缩另一个区间</td>
+</tr>
+<tr>
+<td>选对工具</td>
+<td>全局→全局变换，局部→分段&#x2F;非线性，周期噪声→频域</td>
+</tr>
+<tr>
+<td>目的导向</td>
+<td>人眼看清 vs 机器处理</td>
+</tr>
+</tbody></table>
+<h3 id="适用场景速查"><a href="#适用场景速查" class="headerlink" title="适用场景速查"></a>适用场景速查</h3><table>
+<thead>
+<tr>
+<th>原始问题</th>
+<th>推荐方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图像整体偏暗&#x2F;偏亮</td>
+<td>全段线性 &#x2F; Gamma校正</td>
+</tr>
+<tr>
+<td>暗部细节看不清</td>
+<td>对数变换 &#x2F; Gamma(γ&lt;1)</td>
+</tr>
+<tr>
+<td>整体效果差</td>
+<td>直方图均衡化</td>
+</tr>
+<tr>
+<td>椒盐噪声</td>
+<td>中值滤波</td>
+</tr>
+<tr>
+<td>高斯噪声</td>
+<td>均值&#x2F;高斯滤波</td>
+</tr>
+<tr>
+<td>边缘模糊</td>
+<td>Sobel &#x2F; Laplacian</td>
+</tr>
+<tr>
+<td>周期性条纹噪声</td>
+<td>陷波滤波</td>
+</tr>
+<tr>
+<td>光照不均</td>
+<td>同态滤波</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Jasper Orion</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/">http://example.com/2026/01/19/图像增强_详细笔记/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Error' blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86-%E7%81%B0%E5%BA%A6%E5%8F%98%E6%8D%A2-%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96-%E5%B9%B3%E6%BB%91%E6%BB%A4%E6%B3%A2-%E9%94%90%E5%8C%96%E6%BB%A4%E6%B3%A2-%E5%90%8C%E6%80%81%E6%BB%A4%E6%B3%A2/">图像处理 灰度变换 直方图均衡化 平滑滤波 锐化滤波 同态滤波</a></div><div class="post-share"><div class="social-share" data-image="/uploads/HollowKnight.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像形态学处理 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">图像形态学处理 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">图像形态学处理 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第三章Python 3.12 + OpenCV + NumPy + Matplotlib   一、形态学概述1.1 核心思想 “用结构元素探测图像，提取与结构元素相匹配的形状信息”  数学形态学基于集合论，关注的是图像的几何结构和形态特征。    对比 图像增强 形态学处理    关注点 像素灰度值 目标几何形状   典型操作 拉伸、滤波 膨胀、腐蚀、开&#x2F;闭   理论基础 灰度变换、卷积 集合论   1.2 基本术语   术语 含义    结构元素 (SE) 小的二值模板（3×3方形&#x2F;十字&#x2F;椭圆），中心为锚点   膨胀 扩大白色区域，缩小黑色孔洞   腐蚀 缩小白色区域，扩大黑色孔洞   开运算 先腐蚀后膨胀 → 去噪点、断开窄连接   闭运算 先膨胀后腐蚀 → 填孔洞、连接断口    二、二值形态学2.1 膨胀与腐蚀 — 手写实现123456789101112131415161718192021222324252627282930313233343536373839impor...</div></div></div></a><a class="pagination-related" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像变换 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">图像变换 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">图像变换 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第一章Python 3.12 + OpenCV + NumPy + Matplotlib   一、图像变换概述1.1 为什么需要变换   问题 变换的解决    空域卷积 $O(N^2M^2)$ 太慢 卷积定理 → 频域乘积 $O(N\log N)$   噪声&#x2F;纹理&#x2F;轮廓混叠 频率分解 → 低通&#x2F;高通分别处理   改一个像素只影响局部 频域一个分量影响全局   周期性图案难检测 频谱对称亮点对   数据压缩 DCT 能量集中 → JPEG   1.2 四种主要变换   变换 特点 应用    几何变换 改变像素坐标 校正、配准   傅里叶变换 (DFT) 复数，幅度+相位 滤波、频域分析   离散余弦变换 (DCT) 实数，能量极集中 JPEG 压缩   小波变换 (DWT) 多分辨率 JPEG2000、去噪    二、几何变换2.1 核心流程（逆向映射）1新图像素 (x&#x27;,y&#x27;) → 逆映射 → 原图浮点坐标 (x,y) → 插值 → 赋值  正向问题： 多个原...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Jasper Orion</div><div class="author-info-description">No more talking,just coding</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="fab fa-github"><i class="GitHub"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="fa fa-envelope"><i class="E-Mail"></i></a><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #000000;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA-%E2%80%94-%E5%AE%8C%E6%95%B4%E6%95%99%E5%AD%A6%E7%AC%94%E8%AE%B0%EF%BC%88%E5%90%AB%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">图像增强 — 完整教学笔记（含代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一、图像增强概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%92%88%E5%AF%B9%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 针对什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 核心思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%9B%B4%E6%8E%A5%E7%81%B0%E5%BA%A6%E5%8F%98%E6%8D%A2%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">二、直接灰度变换法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%85%A8%E6%AE%B5%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 全段线性变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%86%E6%AE%B5%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 分段线性变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 非线性变换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E6%95%B0%E5%8F%98%E6%8D%A2"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">对数变换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gamma-%E6%A0%A1%E6%AD%A3"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">Gamma 校正</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96"><span class="toc-number">1.3.</span> <span class="toc-text">三、直方图均衡化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%82%BB%E5%9F%9F%E5%A2%9E%E5%BC%BA"><span class="toc-number">1.4.</span> <span class="toc-text">四、邻域增强</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%B9%B3%E6%BB%91%E6%BB%A4%E6%B3%A2"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 平滑滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%94%90%E5%8C%96%E6%BB%A4%E6%B3%A2"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 锐化滤波</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%A2%91%E5%9F%9F%E5%A2%9E%E5%BC%BA"><span class="toc-number">1.5.</span> <span class="toc-text">五、频域增强</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 基本流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E4%BD%8E%E9%80%9A%E6%BB%A4%E6%B3%A2"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 低通滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%AB%98%E9%80%9A%E6%BB%A4%E6%B3%A2"><span class="toc-number">1.5.3.</span> <span class="toc-text">5.3 高通滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E9%99%B7%E6%B3%A2%E6%BB%A4%E6%B3%A2%EF%BC%88%E5%8E%BB%E5%91%A8%E6%9C%9F%E6%80%A7%E5%99%AA%E5%A3%B0%EF%BC%89"><span class="toc-number">1.5.4.</span> <span class="toc-text">5.4 陷波滤波（去周期性噪声）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E5%90%8C%E6%80%81%E6%BB%A4%E6%B3%A2%EF%BC%88%E5%8E%BB%E5%85%89%E7%85%A7%E4%B8%8D%E5%9D%87%EF%BC%89"><span class="toc-number">1.5.5.</span> <span class="toc-text">5.5 同态滤波（去光照不均）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">六、总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99"><span class="toc-number">1.6.1.</span> <span class="toc-text">核心原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5"><span class="toc-number">1.6.2.</span> <span class="toc-text">适用场景速查</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E6%95%B0%E5%AD%97%E6%B0%B4%E5%8D%B0_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="数字水印 — 完整教学笔记">数字水印 — 完整教学笔记</a><time datetime="2026-01-19T03:30:00.000Z" title="发表于 2026-01-19 11:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像压缩 — 完整教学笔记">图像压缩 — 完整教学笔记</a><time datetime="2026-01-19T03:00:00.000Z" title="发表于 2026-01-19 11:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像分割 — 完整教学笔记">图像分割 — 完整教学笔记</a><time datetime="2026-01-19T02:30:00.000Z" title="发表于 2026-01-19 10:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像形态学处理 — 完整教学笔记">图像形态学处理 — 完整教学笔记</a><time datetime="2026-01-19T02:00:00.000Z" title="发表于 2026-01-19 10:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像增强 — 完整教学笔记">图像增强 — 完整教学笔记</a><time datetime="2026-01-19T01:30:00.000Z" title="发表于 2026-01-19 09:30:00">2026-01-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Jasper Orion</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="FALL,IN,LOVE,WITH,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

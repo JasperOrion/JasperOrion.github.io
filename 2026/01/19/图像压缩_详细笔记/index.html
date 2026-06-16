@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图像压缩 — 完整教学笔记 | Error' blog</title><meta name="author" content="Jasper Orion,536584667@qq.com"><meta name="copyright" content="Jasper Orion"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="图像压缩 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第五章Python 3.12 + NumPy + Matplotlib   一、概述1.1 核心思想：三类冗余   冗余类型 定义 去除方法    编码冗余 灰度分布不均但等长编码 变长编码（哈夫曼&#x2F;算术）   像素间冗余 相邻像素高度相关 预测编码(DPCM)&#x2F;变换(DCT&#x2F;DWT)   心理视觉冗">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像压缩 — 完整教学笔记">
+<meta property="og:url" content="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Error&#39; blog">
+<meta property="og:description" content="图像压缩 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第五章Python 3.12 + NumPy + Matplotlib   一、概述1.1 核心思想：三类冗余   冗余类型 定义 去除方法    编码冗余 灰度分布不均但等长编码 变长编码（哈夫曼&#x2F;算术）   像素间冗余 相邻像素高度相关 预测编码(DPCM)&#x2F;变换(DCT&#x2F;DWT)   心理视觉冗">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/uploads/HollowKnight.png">
+<meta property="article:published_time" content="2026-01-19T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-19T03:00:00.000Z">
+<meta property="article:author" content="Jasper Orion">
+<meta property="article:tag" content="图像处理 哈夫曼编码 算术编码 LZW 行程编码 DPCM 小波变换">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/uploads/HollowKnight.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "图像压缩 — 完整教学笔记",
+  "url": "http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/",
+  "image": "http://example.com/uploads/HollowKnight.png",
+  "datePublished": "2026-01-19T03:00:00.000Z",
+  "dateModified": "2026-01-19T03:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jasper Orion",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '图像压缩 — 完整教学笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/uploads/HollowKnight.png" alt="Logo"><span class="site-name">Error' blog</span></a><a class="nav-page-title" href="/"><span class="site-name">图像压缩 — 完整教学笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">图像压缩 — 完整教学笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-19T03:00:00.000Z" title="发表于 2026-01-19 11:00:00">2026-01-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-19T03:00:00.000Z" title="更新于 2026-01-19 11:00:00">2026-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">数字图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="图像压缩-—-完整教学笔记（含代码）"><a href="#图像压缩-—-完整教学笔记（含代码）" class="headerlink" title="图像压缩 — 完整教学笔记（含代码）"></a>图像压缩 — 完整教学笔记（含代码）</h1><blockquote>
+<p>《数字图像处理》教学笔记 · 第五章<br>Python 3.12 + NumPy + Matplotlib</p>
+</blockquote>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><h3 id="1-1-核心思想：三类冗余"><a href="#1-1-核心思想：三类冗余" class="headerlink" title="1.1 核心思想：三类冗余"></a>1.1 核心思想：三类冗余</h3><table>
+<thead>
+<tr>
+<th>冗余类型</th>
+<th>定义</th>
+<th>去除方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>编码冗余</strong></td>
+<td>灰度分布不均但等长编码</td>
+<td>变长编码（哈夫曼&#x2F;算术）</td>
+</tr>
+<tr>
+<td><strong>像素间冗余</strong></td>
+<td>相邻像素高度相关</td>
+<td>预测编码(DPCM)&#x2F;变换(DCT&#x2F;DWT)</td>
+</tr>
+<tr>
+<td><strong>心理视觉冗余</strong></td>
+<td>人眼对高频不敏感</td>
+<td>量化（丢弃高频系数）</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-通用压缩模型"><a href="#1-2-通用压缩模型" class="headerlink" title="1.2 通用压缩模型"></a>1.2 通用压缩模型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">编码器: f(x,y) → 映射器(变换/预测) → 量化器(有损关键) → 符号编码器(熵编码) → 码流</span><br><span class="line">解码器: 码流 → 符号解码器 → 逆映射器 → ĝ(x,y)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-分类"><a href="#1-3-分类" class="headerlink" title="1.3 分类"></a>1.3 分类</h3><table>
+<thead>
+<tr>
+<th>按重建</th>
+<th>按原理</th>
+<th>按码长</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无损：哈夫曼&#x2F;算术&#x2F;LZW&#x2F;RLE</td>
+<td>统计编码</td>
+<td>定长编码</td>
+</tr>
+<tr>
+<td>有损：DCT(JPEG)&#x2F;DWT(JPEG2000)</td>
+<td>字典编码&#x2F;预测编码&#x2F;变换编码</td>
+<td>变长编码</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="二、六大压缩编码技术（含代码）"><a href="#二、六大压缩编码技术（含代码）" class="headerlink" title="二、六大压缩编码技术（含代码）"></a>二、六大压缩编码技术（含代码）</h2><h3 id="2-1-哈夫曼编码"><a href="#2-1-哈夫曼编码" class="headerlink" title="2.1 哈夫曼编码"></a>2.1 哈夫曼编码</h3><p><strong>核心：</strong> 高频符号短码，低频符号长码 → <strong>最优前缀码</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> heapq, numpy <span class="keyword">as</span> np, cv2</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"></span><br><span class="line">img = cv2.imread(<span class="string">&#x27;s1.png&#x27;</span>, <span class="number">0</span>)</span><br><span class="line">flat = img.ravel()</span><br><span class="line">counter = Counter(flat)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建哈夫曼树（最小堆）</span></span><br><span class="line">heap = []</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> counter.items():</span><br><span class="line">    heapq.heappush(heap, &#123;<span class="string">&#x27;freq&#x27;</span>: v, <span class="string">&#x27;symbol&#x27;</span>: <span class="built_in">str</span>(k), <span class="string">&#x27;left&#x27;</span>: <span class="literal">None</span>, <span class="string">&#x27;right&#x27;</span>: <span class="literal">None</span>&#125;)</span><br><span class="line"><span class="comment"># 手动比较用：heapq 按 freq 排序</span></span><br><span class="line">heap = [(v, <span class="built_in">str</span>(k), <span class="literal">None</span>, <span class="literal">None</span>) <span class="keyword">for</span> k, v <span class="keyword">in</span> counter.items()]</span><br><span class="line">heapq.heapify(heap)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">len</span>(heap) &gt; <span class="number">1</span>:</span><br><span class="line">    l = heapq.heappop(heap)  <span class="comment"># (freq, symbol, left, right)</span></span><br><span class="line">    r = heapq.heappop(heap)</span><br><span class="line">    heapq.heappush(heap, (l[<span class="number">0</span>]+r[<span class="number">0</span>], l[<span class="number">1</span>]+<span class="string">&#x27;+&#x27;</span>+r[<span class="number">1</span>], l, r))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成码表</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gen_codes</span>(<span class="params">node, prefix=<span class="string">&#x27;&#x27;</span>, book=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> book <span class="keyword">is</span> <span class="literal">None</span>: book = &#123;&#125;</span><br><span class="line">    freq, sym, left, right = node</span><br><span class="line">    <span class="keyword">if</span> left <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># 叶子</span></span><br><span class="line">        book[sym] = prefix</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        gen_codes(left, prefix+<span class="string">&#x27;0&#x27;</span>, book)</span><br><span class="line">        gen_codes(right, prefix+<span class="string">&#x27;1&#x27;</span>, book)</span><br><span class="line">    <span class="keyword">return</span> book</span><br><span class="line"></span><br><span class="line">codebook = gen_codes(heap[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编码/解码</span></span><br><span class="line">encoded = <span class="string">&#x27;&#x27;</span>.join(codebook[<span class="built_in">str</span>(v)] <span class="keyword">for</span> v <span class="keyword">in</span> flat)</span><br><span class="line"><span class="comment"># 解码：读取bits走树，到叶子输出符号</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong> A:0.4, B:0.3, C:0.2, D:0.1 → 码字 A&#x3D;0, B&#x3D;10, C&#x3D;110, D&#x3D;111，平均码长 1.9 bit vs 等长 2 bit。</p>
+<p><strong>特性：</strong> 前缀性（解码唯一）、即时性（收到即可解码）、最优性（最小平均码长）。</p>
+<h3 id="2-2-算术编码"><a href="#2-2-算术编码" class="headerlink" title="2.2 算术编码"></a>2.2 算术编码</h3><p><strong>核心：</strong> 将整个消息编码为一个 [0,1) 中的实数子区间，区间长度 &#x3D; 消息联合概率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">arithmetic_encode</span>(<span class="params">sequence, prob_dict</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;算术编码：返回 (low, high) 区间&quot;&quot;&quot;</span></span><br><span class="line">    cumul = &#123;&#125;</span><br><span class="line">    cumulative = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> sym, prob <span class="keyword">in</span> <span class="built_in">sorted</span>(prob_dict.items()):</span><br><span class="line">        cumul[sym] = cumulative</span><br><span class="line">        cumulative += prob</span><br><span class="line">    </span><br><span class="line">    low, high = <span class="number">0.0</span>, <span class="number">1.0</span></span><br><span class="line">    <span class="keyword">for</span> sym <span class="keyword">in</span> sequence:</span><br><span class="line">        range_size = high - low</span><br><span class="line">        high = low + range_size * (cumul[sym] + prob_dict[sym])</span><br><span class="line">        low  = low + range_size * cumul[sym]</span><br><span class="line">    <span class="keyword">return</span> low, high</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">arithmetic_decode</span>(<span class="params">value, prob_dict, seq_len</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从编码值恢复符号序列&quot;&quot;&quot;</span></span><br><span class="line">    cumul = &#123;&#125;</span><br><span class="line">    cumulative = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> sym, prob <span class="keyword">in</span> <span class="built_in">sorted</span>(prob_dict.items()):</span><br><span class="line">        cumul[sym] = cumulative</span><br><span class="line">        cumulative += prob</span><br><span class="line">    </span><br><span class="line">    decoded = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(seq_len):</span><br><span class="line">        <span class="keyword">for</span> sym <span class="keyword">in</span> <span class="built_in">sorted</span>(prob_dict.keys()):</span><br><span class="line">            <span class="keyword">if</span> cumul[sym] &lt;= value &lt; cumul[sym] + prob_dict[sym]:</span><br><span class="line">                decoded.append(sym)</span><br><span class="line">                value = (value - cumul[sym]) / prob_dict[sym]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> decoded</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong> 编码 “BAC” (概率 A:0.6, B:0.3, C:0.1)：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Step 1 B: [0.6, 0.9)</span><br><span class="line">Step 2 A: [0.60, 0.78)</span><br><span class="line">Step 3 C: [0.762, 0.780) → 输出 0.77</span><br></pre></td></tr></table></figure>
+<p>解码 0.77 → B → A → C ✓</p>
+<p><strong>与哈夫曼的区别：</strong> 哈夫曼每符号独立编码为整数比特，算术编码整个消息为一个分数比特 → <strong>更接近熵极限</strong>。</p>
+<h3 id="2-3-LZW-编码"><a href="#2-3-LZW-编码" class="headerlink" title="2.3 LZW 编码"></a>2.3 LZW 编码</h3><p><strong>核心：</strong> 动态构建”字符串→编号”字典。解码端<strong>同步重建字典</strong>，无需传输。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">lzw_encode</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;LZW 编码&quot;&quot;&quot;</span></span><br><span class="line">    dictionary = &#123;<span class="built_in">bytes</span>([i]): i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>)&#125;</span><br><span class="line">    next_code = <span class="number">256</span></span><br><span class="line">    w, output = <span class="string">b&#x27;&#x27;</span>, []</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> data:</span><br><span class="line">        wb = w + <span class="built_in">bytes</span>([byte])</span><br><span class="line">        <span class="keyword">if</span> wb <span class="keyword">in</span> dictionary:</span><br><span class="line">            w = wb</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            output.append(dictionary[w])</span><br><span class="line">            dictionary[wb] = next_code</span><br><span class="line">            next_code += <span class="number">1</span></span><br><span class="line">            w = <span class="built_in">bytes</span>([byte])</span><br><span class="line">    <span class="keyword">if</span> w:</span><br><span class="line">        output.append(dictionary[w])</span><br><span class="line">    <span class="keyword">return</span> output, dictionary</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">lzw_decode</span>(<span class="params">indices</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;LZW 解码&quot;&quot;&quot;</span></span><br><span class="line">    dictionary = &#123;i: <span class="built_in">bytes</span>([i]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>)&#125;</span><br><span class="line">    next_code = <span class="number">256</span></span><br><span class="line">    result = <span class="built_in">bytearray</span>()</span><br><span class="line">    w = dictionary[indices[<span class="number">0</span>]]</span><br><span class="line">    result.extend(w)</span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> indices[<span class="number">1</span>:]:</span><br><span class="line">        <span class="keyword">if</span> idx <span class="keyword">in</span> dictionary:</span><br><span class="line">            entry = dictionary[idx]</span><br><span class="line">        <span class="keyword">elif</span> idx == next_code:</span><br><span class="line">            entry = w + <span class="built_in">bytes</span>([w[<span class="number">0</span>]])</span><br><span class="line">        result.extend(entry)</span><br><span class="line">        dictionary[next_code] = w + <span class="built_in">bytes</span>([entry[<span class="number">0</span>]])</span><br><span class="line">        next_code += <span class="number">1</span></span><br><span class="line">        w = entry</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bytes</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong> 编码 “ABABABAB” → 输出 [65, 66, 256, 258, 66]（5个索引代表8个字符）。字典动态扩展：256&#x3D;AB, 257&#x3D;BA, 258&#x3D;ABA。</p>
+<p><strong>解码关键：</strong> 每处理一个索引后，用 <strong>上一个输出串+当前输出串首字符</strong> 扩展字典，与编码端严格同步。</p>
+<h3 id="2-4-行程编码-RLE"><a href="#2-4-行程编码-RLE" class="headerlink" title="2.4 行程编码 (RLE)"></a>2.4 行程编码 (RLE)</h3><p><strong>核心：</strong> 连续相同值替换为 (值, 重复次数) 二元组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rle_encode</span>(<span class="params">data</span>):</span><br><span class="line">    encoded = []</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> encoded</span><br><span class="line">    prev = data[<span class="number">0</span>]; count = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> val <span class="keyword">in</span> data[<span class="number">1</span>:]:</span><br><span class="line">        <span class="keyword">if</span> val == prev <span class="keyword">and</span> count &lt; <span class="number">255</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            encoded.append((<span class="built_in">int</span>(prev), count))</span><br><span class="line">            prev = val; count = <span class="number">1</span></span><br><span class="line">    encoded.append((<span class="built_in">int</span>(prev), count))</span><br><span class="line">    <span class="keyword">return</span> encoded</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rle_decode</span>(<span class="params">encoded</span>):</span><br><span class="line">    decoded = []</span><br><span class="line">    <span class="keyword">for</span> val, count <span class="keyword">in</span> encoded:</span><br><span class="line">        decoded.extend([val] * count)</span><br><span class="line">    <span class="keyword">return</span> np.array(decoded, dtype=np.uint8)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>图像类型</th>
+<th align="center">RLE 压缩比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二值图（文字扫描）</td>
+<td align="center">10:1 ~ 100:1</td>
+</tr>
+<tr>
+<td>自然图像</td>
+<td align="center">可能 &lt; 1:1</td>
+</tr>
+</tbody></table>
+<h3 id="2-5-DPCM-预测编码"><a href="#2-5-DPCM-预测编码" class="headerlink" title="2.5 DPCM 预测编码"></a>2.5 DPCM 预测编码</h3><p><strong>核心：</strong> 不编码像素值，编码<strong>预测值与实际值的差值</strong>（残差）——残差服从拉普拉斯分布，集中于零附近。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dpcm_encode_1d</span>(<span class="params">img</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;1D 预测器：前像素 = 预测值&quot;&quot;&quot;</span></span><br><span class="line">    h, w = img.shape</span><br><span class="line">    residual = np.zeros_like(img, dtype=np.int16)</span><br><span class="line">    residual[:, <span class="number">0</span>] = img[:, <span class="number">0</span>]  <span class="comment"># 首列直接保存</span></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(h):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, w):</span><br><span class="line">            residual[y, x] = <span class="built_in">int</span>(img[y, x]) - <span class="built_in">int</span>(img[y, x-<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">return</span> residual</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dpcm_decode_1d</span>(<span class="params">residual</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;1D 解码：ŷ(n) = ŷ(n-1) + e(n)&quot;&quot;&quot;</span></span><br><span class="line">    h, w = residual.shape</span><br><span class="line">    decoded = np.zeros_like(residual, dtype=np.uint8)</span><br><span class="line">    decoded[:, <span class="number">0</span>] = residual[:, <span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(h):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, w):</span><br><span class="line">            decoded[y, x] = np.clip(residual[y, x] + decoded[y, x-<span class="number">1</span>], <span class="number">0</span>, <span class="number">255</span>)</span><br><span class="line">    <span class="keyword">return</span> decoded</span><br><span class="line"></span><br><span class="line"><span class="comment"># 量化（有损模式）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">quantize</span>(<span class="params">residual, step=<span class="number">2</span></span>):</span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">round</span>(residual / step).astype(np.int16)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证无损</span></span><br><span class="line">residual = dpcm_encode_1d(img)</span><br><span class="line">decoded = dpcm_decode_1d(residual)</span><br><span class="line"><span class="keyword">assert</span> np.array_equal(decoded, img)  <span class="comment"># 无损验证通过</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2D 预测器：</strong> $\hat{f}(x,y) &#x3D; 0.5f(x-1,y) + 0.5f(x,y-1)$</p>
+<h3 id="2-6-小波变换编码-DWT"><a href="#2-6-小波变换编码-DWT" class="headerlink" title="2.6 小波变换编码 (DWT)"></a>2.6 小波变换编码 (DWT)</h3><p><strong>核心：</strong> DWT 将图像分解为 LL(低频逼近)&#x2F;HL(水平边缘)&#x2F;LH(垂直边缘)&#x2F;HH(对角细节) 子带，能量集中在 LL。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">haar_dwt_2d</span>(<span class="params">img</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;2D Haar 小波变换&quot;&quot;&quot;</span></span><br><span class="line">    current = img.astype(np.float64)</span><br><span class="line">    h, w = current.shape</span><br><span class="line">    <span class="keyword">if</span> h%<span class="number">2</span>: current = np.pad(current, ((<span class="number">0</span>,<span class="number">1</span>),(<span class="number">0</span>,<span class="number">0</span>)))</span><br><span class="line">    <span class="keyword">if</span> w%<span class="number">2</span>: current = np.pad(current, ((<span class="number">0</span>,<span class="number">0</span>),(<span class="number">0</span>,<span class="number">1</span>)))</span><br><span class="line">    h, w = current.shape</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 行变换</span></span><br><span class="line">    rl = current[:,<span class="number">0</span>::<span class="number">2</span>] + current[:,<span class="number">1</span>::<span class="number">2</span>]   <span class="comment"># 低频 = 和</span></span><br><span class="line">    rh = current[:,<span class="number">0</span>::<span class="number">2</span>] - current[:,<span class="number">1</span>::<span class="number">2</span>]   <span class="comment"># 高频 = 差</span></span><br><span class="line">    <span class="comment"># 列变换</span></span><br><span class="line">    LL = rl[<span class="number">0</span>::<span class="number">2</span>,:] + rl[<span class="number">1</span>::<span class="number">2</span>,:]</span><br><span class="line">    HL = rl[<span class="number">0</span>::<span class="number">2</span>,:] - rl[<span class="number">1</span>::<span class="number">2</span>,:]</span><br><span class="line">    LH = rh[<span class="number">0</span>::<span class="number">2</span>,:] + rh[<span class="number">1</span>::<span class="number">2</span>,:]</span><br><span class="line">    HH = rh[<span class="number">0</span>::<span class="number">2</span>,:] - rh[<span class="number">1</span>::<span class="number">2</span>,:]</span><br><span class="line">    <span class="keyword">return</span> LL, HL, LH, HH</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">haar_idwt_2d</span>(<span class="params">LL, HL, LH, HH</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;2D Haar 逆小波变换&quot;&quot;&quot;</span></span><br><span class="line">    h_ll, w_ll = LL.shape</span><br><span class="line">    hn, wn = h_ll*<span class="number">2</span>, w_ll*<span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    rl = np.zeros((hn, w_ll))</span><br><span class="line">    rh = np.zeros((hn, w_ll))</span><br><span class="line">    rl[<span class="number">0</span>::<span class="number">2</span>,:] = (LL+HL)/<span class="number">2</span>; rl[<span class="number">1</span>::<span class="number">2</span>,:] = (LL-HL)/<span class="number">2</span></span><br><span class="line">    rh[<span class="number">0</span>::<span class="number">2</span>,:] = (LH+HH)/<span class="number">2</span>; rh[<span class="number">1</span>::<span class="number">2</span>,:] = (LH-HH)/<span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    rec = np.zeros((hn, wn))</span><br><span class="line">    rec[:,<span class="number">0</span>::<span class="number">2</span>] = (rl+rh)/<span class="number">2</span>; rec[:,<span class="number">1</span>::<span class="number">2</span>] = (rl-rh)/<span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> rec</span><br></pre></td></tr></table></figure>
+
+<p><strong>DWT vs DCT：</strong></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>DCT (JPEG)</th>
+<th>DWT (JPEG2000)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基函数</td>
+<td>余弦波（全局）</td>
+<td>小波（局部）</td>
+</tr>
+<tr>
+<td>块效应</td>
+<td>有（8×8边界可见）</td>
+<td><strong>无</strong></td>
+</tr>
+<tr>
+<td>分辨率可伸缩</td>
+<td>不支持</td>
+<td><strong>支持</strong></td>
+</tr>
+<tr>
+<td>低比特率性能</td>
+<td>一般</td>
+<td><strong>更好</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、综合对比"><a href="#三、综合对比" class="headerlink" title="三、综合对比"></a>三、综合对比</h2><h3 id="六种算法总览"><a href="#六种算法总览" class="headerlink" title="六种算法总览"></a>六种算法总览</h3><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>类型</th>
+<th>原理</th>
+<th align="center">典型CR</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>哈夫曼</td>
+<td>统计编码</td>
+<td>高频短码</td>
+<td align="center">~1.5:1</td>
+<td>JPEG熵编码、PNG</td>
+</tr>
+<tr>
+<td>算术编码</td>
+<td>统计编码</td>
+<td>区间收缩</td>
+<td align="center">~1.5:1↑</td>
+<td>H.264 CABAC</td>
+</tr>
+<tr>
+<td>LZW</td>
+<td>字典编码</td>
+<td>动态字典</td>
+<td align="center">2~5:1</td>
+<td>GIF、TIFF</td>
+</tr>
+<tr>
+<td>RLE</td>
+<td>游程编码</td>
+<td>连续值压缩</td>
+<td align="center">&gt;10:1(纯色)</td>
+<td>传真、JPEG零系数</td>
+</tr>
+<tr>
+<td>DPCM</td>
+<td>预测编码</td>
+<td>预测+残差</td>
+<td align="center">2~4:1</td>
+<td>JPEG无损、H.264</td>
+</tr>
+<tr>
+<td>DWT</td>
+<td>变换编码</td>
+<td>多分辨率+量化</td>
+<td align="center">10~50:1</td>
+<td>JPEG2000</td>
+</tr>
+</tbody></table>
+<h3 id="选择建议"><a href="#选择建议" class="headerlink" title="选择建议"></a>选择建议</h3><ol>
+<li>纯色&#x2F;简单图形 → RLE</li>
+<li>已知概率分布 → 哈夫曼</li>
+<li>概率动态变化 → 算术编码</li>
+<li>自然图像无损 → DPCM + 哈夫曼</li>
+<li>自然图像有损 → DWT (JPEG2000) &#x2F; DCT (JPEG)</li>
+</ol>
+<h3 id="实际标准中的组合"><a href="#实际标准中的组合" class="headerlink" title="实际标准中的组合"></a>实际标准中的组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">JPEG:    DCT → 量化 → zigzag → RLE(零) + 哈夫曼</span><br><span class="line">JPEG2000: DWT → 量化 → EBCOT(算术)</span><br><span class="line">PNG:     预测 → LZ77 + 哈夫曼</span><br><span class="line">GIF:     LZW</span><br><span class="line">H.264:   预测 → DCT → 量化 → CABAC(算术)</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Jasper Orion</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/">http://example.com/2026/01/19/图像压缩_详细笔记/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Error' blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86-%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81-%E7%AE%97%E6%9C%AF%E7%BC%96%E7%A0%81-LZW-%E8%A1%8C%E7%A8%8B%E7%BC%96%E7%A0%81-DPCM-%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2/">图像处理 哈夫曼编码 算术编码 LZW 行程编码 DPCM 小波变换</a></div><div class="post-share"><div class="social-share" data-image="/uploads/HollowKnight.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/19/%E6%95%B0%E5%AD%97%E6%B0%B4%E5%8D%B0_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="数字水印 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">数字水印 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">数字水印 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第六章Python 3.12 + NumPy + Matplotlib   一、概述1.1 什么是数字水印 将标识信息以不可感知的方式嵌入到数字载体中，用于版权保护、内容认证、篡改检测。  1.2 水印三角权衡（不可兼得）1234        容量        /\       /  \鲁棒性 ────── 不可感知性  1.3 核心流程123原始载体 C → 嵌入算法 → 含水印 C_w → 传输/攻击 → C_w&#x27; → 检测/提取 → 结果      ↑                       ↑   水印 W                   密钥 K  1.4 评价标准   指标 公式 理想值    PSNR $10\log_{10}(255^2&#x2F;\text{MSE})$ &gt;40 dB   BER 错误比特数&#x2F;总比特数 0   NC $\frac{\sum W\cdot W’}{\sqrt{\sum W^2\sum W’^2}}$ 1.0    二、五种水印算...</div></div></div></a><a class="pagination-related" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像分割 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">图像分割 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">图像分割 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第四章Python 3.12 + OpenCV + NumPy + Matplotlib   一、概述1.1 什么是图像分割 将图像划分为若干互不相交的区域，每个区域具有一致的视觉特性。  地位： 原始图像 → 分割 → 目标提取 → 特征分析 → 识别理解 1.2 基本概念   概念 说明    区域 (Region) 具有相似特性的连通像素集   边缘 (Edge) 相邻区域之间的灰度突变   前景&#x2F;背景 目标物体 &#x2F; 其余部分   过分割 一个目标被分成多块   欠分割 多个目标被合并在一起   两个基本原则： 不连续性（边缘法）和相似性（区域法）。 1.3 分类1234图像分割├── 基于边缘：Canny、Sobel、Laplacian├── 基于区域：阈值法(Otsu/自适应/多阈值)、区域生长、分水岭└── 基于显著性：SR(谱残差)、FT(频率调谐)、颜色对比度   二、基于边缘的分割 — Canny 边缘检测2.1 Canny 四步骤123456Step 1: 高斯滤波平滑 (...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Jasper Orion</div><div class="author-info-description">No more talking,just coding</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="fab fa-github"><i class="GitHub"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="fa fa-envelope"><i class="E-Mail"></i></a><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #000000;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9-%E2%80%94-%E5%AE%8C%E6%95%B4%E6%95%99%E5%AD%A6%E7%AC%94%E8%AE%B0%EF%BC%88%E5%90%AB%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">图像压缩 — 完整教学笔记（含代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%EF%BC%9A%E4%B8%89%E7%B1%BB%E5%86%97%E4%BD%99"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 核心思想：三类冗余</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E9%80%9A%E7%94%A8%E5%8E%8B%E7%BC%A9%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 通用压缩模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%85%AD%E5%A4%A7%E5%8E%8B%E7%BC%A9%E7%BC%96%E7%A0%81%E6%8A%80%E6%9C%AF%EF%BC%88%E5%90%AB%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二、六大压缩编码技术（含代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 哈夫曼编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%AE%97%E6%9C%AF%E7%BC%96%E7%A0%81"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 算术编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-LZW-%E7%BC%96%E7%A0%81"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 LZW 编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%A1%8C%E7%A8%8B%E7%BC%96%E7%A0%81-RLE"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 行程编码 (RLE)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-DPCM-%E9%A2%84%E6%B5%8B%E7%BC%96%E7%A0%81"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 DPCM 预测编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2%E7%BC%96%E7%A0%81-DWT"><span class="toc-number">1.2.6.</span> <span class="toc-text">2.6 小波变换编码 (DWT)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BB%BC%E5%90%88%E5%AF%B9%E6%AF%94"><span class="toc-number">1.3.</span> <span class="toc-text">三、综合对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E7%A7%8D%E7%AE%97%E6%B3%95%E6%80%BB%E8%A7%88"><span class="toc-number">1.3.1.</span> <span class="toc-text">六种算法总览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">选择建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E6%A0%87%E5%87%86%E4%B8%AD%E7%9A%84%E7%BB%84%E5%90%88"><span class="toc-number">1.3.3.</span> <span class="toc-text">实际标准中的组合</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E6%95%B0%E5%AD%97%E6%B0%B4%E5%8D%B0_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="数字水印 — 完整教学笔记">数字水印 — 完整教学笔记</a><time datetime="2026-01-19T03:30:00.000Z" title="发表于 2026-01-19 11:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像压缩 — 完整教学笔记">图像压缩 — 完整教学笔记</a><time datetime="2026-01-19T03:00:00.000Z" title="发表于 2026-01-19 11:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像分割 — 完整教学笔记">图像分割 — 完整教学笔记</a><time datetime="2026-01-19T02:30:00.000Z" title="发表于 2026-01-19 10:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像形态学处理 — 完整教学笔记">图像形态学处理 — 完整教学笔记</a><time datetime="2026-01-19T02:00:00.000Z" title="发表于 2026-01-19 10:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像增强 — 完整教学笔记">图像增强 — 完整教学笔记</a><time datetime="2026-01-19T01:30:00.000Z" title="发表于 2026-01-19 09:30:00">2026-01-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Jasper Orion</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="FALL,IN,LOVE,WITH,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

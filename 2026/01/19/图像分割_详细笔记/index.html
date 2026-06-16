@@ -1,0 +1,328 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图像分割 — 完整教学笔记 | Error' blog</title><meta name="author" content="Jasper Orion,536584667@qq.com"><meta name="copyright" content="Jasper Orion"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="图像分割 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第四章Python 3.12 + OpenCV + NumPy + Matplotlib   一、概述1.1 什么是图像分割 将图像划分为若干互不相交的区域，每个区域具有一致的视觉特性。  地位： 原始图像 → 分割 → 目标提取 → 特征分析 → 识别理解 1.2 基本概念   概念 说明    区域 (Region) 具有相似">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像分割 — 完整教学笔记">
+<meta property="og:url" content="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Error&#39; blog">
+<meta property="og:description" content="图像分割 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第四章Python 3.12 + OpenCV + NumPy + Matplotlib   一、概述1.1 什么是图像分割 将图像划分为若干互不相交的区域，每个区域具有一致的视觉特性。  地位： 原始图像 → 分割 → 目标提取 → 特征分析 → 识别理解 1.2 基本概念   概念 说明    区域 (Region) 具有相似">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/uploads/HollowKnight.png">
+<meta property="article:published_time" content="2026-01-19T02:30:00.000Z">
+<meta property="article:modified_time" content="2026-01-19T02:30:00.000Z">
+<meta property="article:author" content="Jasper Orion">
+<meta property="article:tag" content="图像处理 边缘检测 Canny 阈值分割 区域生长 分水岭 显著性检测">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/uploads/HollowKnight.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "图像分割 — 完整教学笔记",
+  "url": "http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/",
+  "image": "http://example.com/uploads/HollowKnight.png",
+  "datePublished": "2026-01-19T02:30:00.000Z",
+  "dateModified": "2026-01-19T02:30:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jasper Orion",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '图像分割 — 完整教学笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/uploads/HollowKnight.png" alt="Logo"><span class="site-name">Error' blog</span></a><a class="nav-page-title" href="/"><span class="site-name">图像分割 — 完整教学笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">图像分割 — 完整教学笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-19T02:30:00.000Z" title="发表于 2026-01-19 10:30:00">2026-01-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-19T02:30:00.000Z" title="更新于 2026-01-19 10:30:00">2026-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">数字图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="图像分割-—-完整教学笔记（含代码）"><a href="#图像分割-—-完整教学笔记（含代码）" class="headerlink" title="图像分割 — 完整教学笔记（含代码）"></a>图像分割 — 完整教学笔记（含代码）</h1><blockquote>
+<p>《数字图像处理》教学笔记 · 第四章<br>Python 3.12 + OpenCV + NumPy + Matplotlib</p>
+</blockquote>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><h3 id="1-1-什么是图像分割"><a href="#1-1-什么是图像分割" class="headerlink" title="1.1 什么是图像分割"></a>1.1 什么是图像分割</h3><blockquote>
+<p>将图像划分为若干<strong>互不相交的区域</strong>，每个区域具有<strong>一致的视觉特性</strong>。</p>
+</blockquote>
+<p><strong>地位：</strong> <code>原始图像 → 分割 → 目标提取 → 特征分析 → 识别理解</code></p>
+<h3 id="1-2-基本概念"><a href="#1-2-基本概念" class="headerlink" title="1.2 基本概念"></a>1.2 基本概念</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>区域 (Region)</td>
+<td>具有相似特性的连通像素集</td>
+</tr>
+<tr>
+<td>边缘 (Edge)</td>
+<td>相邻区域之间的灰度突变</td>
+</tr>
+<tr>
+<td>前景&#x2F;背景</td>
+<td>目标物体 &#x2F; 其余部分</td>
+</tr>
+<tr>
+<td>过分割</td>
+<td>一个目标被分成多块</td>
+</tr>
+<tr>
+<td>欠分割</td>
+<td>多个目标被合并在一起</td>
+</tr>
+</tbody></table>
+<p><strong>两个基本原则：</strong> 不连续性（边缘法）和相似性（区域法）。</p>
+<h3 id="1-3-分类"><a href="#1-3-分类" class="headerlink" title="1.3 分类"></a>1.3 分类</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">图像分割</span><br><span class="line">├── 基于边缘：Canny、Sobel、Laplacian</span><br><span class="line">├── 基于区域：阈值法(Otsu/自适应/多阈值)、区域生长、分水岭</span><br><span class="line">└── 基于显著性：SR(谱残差)、FT(频率调谐)、颜色对比度</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、基于边缘的分割-—-Canny-边缘检测"><a href="#二、基于边缘的分割-—-Canny-边缘检测" class="headerlink" title="二、基于边缘的分割 — Canny 边缘检测"></a>二、基于边缘的分割 — Canny 边缘检测</h2><h3 id="2-1-Canny-四步骤"><a href="#2-1-Canny-四步骤" class="headerlink" title="2.1 Canny 四步骤"></a>2.1 Canny 四步骤</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Step 1: 高斯滤波平滑 (去噪)</span><br><span class="line">Step 2: 计算梯度幅值与方向 (Sobel近似)</span><br><span class="line">Step 3: 非极大值抑制 (NMS) — 仅保留梯度方向上局部最大值，细化边缘</span><br><span class="line">Step 4: 双阈值检测 + 边缘连接</span><br><span class="line">        高阈值 TH → 强边缘(确定边缘)</span><br><span class="line">        低阈值 TL → 弱边缘(仅当与强边缘相连时保留)</span><br></pre></td></tr></table></figure>
+
+<p>$$T_H : T_L \approx 2:1 \sim 3:1$$</p>
+<h3 id="2-2-手写-Canny-核心步骤"><a href="#2-2-手写-Canny-核心步骤" class="headerlink" title="2.2 手写 Canny 核心步骤"></a>2.2 手写 Canny 核心步骤</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2, numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Microsoft YaHei&#x27;</span>]</span><br><span class="line"></span><br><span class="line">img = cv2.imread(<span class="string">&#x27;s1.png&#x27;</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_canny_edge_steps</span>(<span class="params">img, low_thresh=<span class="number">50</span>, high_thresh=<span class="number">150</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;分步实现 Canny 的核心过程&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Step 1: 高斯平滑</span></span><br><span class="line">    smoothed = cv2.GaussianBlur(img, (<span class="number">5</span>, <span class="number">5</span>), <span class="number">1.0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 2: Sobel 梯度和方向</span></span><br><span class="line">    gx = cv2.Sobel(smoothed, cv2.CV_64F, <span class="number">1</span>, <span class="number">0</span>, ksize=<span class="number">3</span>)</span><br><span class="line">    gy = cv2.Sobel(smoothed, cv2.CV_64F, <span class="number">0</span>, <span class="number">1</span>, ksize=<span class="number">3</span>)</span><br><span class="line">    mag = cv2.magnitude(gx, gy)</span><br><span class="line">    angle = np.arctan2(gy, gx) * <span class="number">180</span> / np.pi</span><br><span class="line">    angle[angle &lt; <span class="number">0</span>] += <span class="number">180</span>  <span class="comment"># 映射到 [0,180]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 3: 非极大值抑制</span></span><br><span class="line">    h, w = mag.shape</span><br><span class="line">    nms = np.zeros_like(mag)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, h-<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, w-<span class="number">1</span>):</span><br><span class="line">            a = angle[i, j]</span><br><span class="line">            <span class="comment"># 量化方向到 0/45/90/135 度</span></span><br><span class="line">            <span class="keyword">if</span> (a &lt;= <span class="number">22.5</span>) <span class="keyword">or</span> (a &gt; <span class="number">157.5</span>):       <span class="comment"># 水平</span></span><br><span class="line">                neighbors = (mag[i,j-<span class="number">1</span>], mag[i,j+<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">elif</span> <span class="number">22.5</span> &lt; a &lt;= <span class="number">67.5</span>:               <span class="comment"># 45°</span></span><br><span class="line">                neighbors = (mag[i-<span class="number">1</span>,j+<span class="number">1</span>], mag[i+<span class="number">1</span>,j-<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">elif</span> <span class="number">67.5</span> &lt; a &lt;= <span class="number">112.5</span>:              <span class="comment"># 垂直</span></span><br><span class="line">                neighbors = (mag[i-<span class="number">1</span>,j], mag[i+<span class="number">1</span>,j])</span><br><span class="line">            <span class="keyword">else</span>:                                <span class="comment"># 135°</span></span><br><span class="line">                neighbors = (mag[i-<span class="number">1</span>,j-<span class="number">1</span>], mag[i+<span class="number">1</span>,j+<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> mag[i,j] &gt;= <span class="built_in">max</span>(neighbors):</span><br><span class="line">                nms[i,j] = mag[i,j]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 4: 双阈值检测</span></span><br><span class="line">    result = np.zeros_like(mag, dtype=np.uint8)</span><br><span class="line">    strong_i = np.where(nms &gt;= high_thresh)</span><br><span class="line">    weak_i = np.where((nms &gt;= low_thresh) &amp; (nms &lt; high_thresh))</span><br><span class="line">    result[strong_i] = <span class="number">255</span></span><br><span class="line">    result[weak_i] = <span class="number">75</span>  <span class="comment"># 弱边缘</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 边缘连接：弱边缘仅当与强边缘邻接时保留</span></span><br><span class="line">    <span class="keyword">from</span> scipy.ndimage <span class="keyword">import</span> binary_dilation</span><br><span class="line">    strong_mask = (result == <span class="number">255</span>)</span><br><span class="line">    strong_dilated = binary_dilation(strong_mask, iterations=<span class="number">1</span>)</span><br><span class="line">    result[~strong_dilated] = <span class="number">0</span></span><br><span class="line">    result[result == <span class="number">75</span>] = <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> result, mag, nms</span><br><span class="line"></span><br><span class="line"><span class="comment"># OpenCV 内置</span></span><br><span class="line">edges = cv2.Canny(img, <span class="number">50</span>, <span class="number">150</span>)</span><br><span class="line"><span class="comment"># Canny(img, low_thresh, high_thresh, apertureSize=3, L2gradient=False)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-噪声影响"><a href="#2-3-噪声影响" class="headerlink" title="2.3 噪声影响"></a>2.3 噪声影响</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>干净&#x2F;低噪声</td>
+<td>Canny(50,150) 直接使用</td>
+</tr>
+<tr>
+<td>高斯噪声</td>
+<td>先高斯平滑再 Canny，或增大 sigma</td>
+</tr>
+<tr>
+<td>椒盐噪声</td>
+<td>先中值滤波再 Canny</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、基于区域的分割"><a href="#三、基于区域的分割" class="headerlink" title="三、基于区域的分割"></a>三、基于区域的分割</h2><h3 id="3-1-阈值法"><a href="#3-1-阈值法" class="headerlink" title="3.1 阈值法"></a>3.1 阈值法</h3><p>$$g(x,y) &#x3D; \begin{cases} 1 &amp; f(x,y) &gt; T \ 0 &amp; f(x,y) \le T \end{cases}$$</p>
+<h4 id="Otsu-大津法（全局阈值）"><a href="#Otsu-大津法（全局阈值）" class="headerlink" title="Otsu 大津法（全局阈值）"></a>Otsu 大津法（全局阈值）</h4><p>自动寻找使<strong>类间方差最大</strong>的最优阈值：</p>
+<p>$$T^* &#x3D; \arg\max_T \omega_0\omega_1(\mu_0 - \mu_1)^2$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Otsu 自动阈值</span></span><br><span class="line">otsu_val, otsu_bin = cv2.threshold(img, <span class="number">0</span>, <span class="number">255</span>, cv2.THRESH_BINARY + cv2.THRESH_OTSU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自适应阈值（处理光照不均）</span></span><br><span class="line">adaptive_mean = cv2.adaptiveThreshold(img, <span class="number">255</span>,</span><br><span class="line">    cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, <span class="number">21</span>, <span class="number">5</span>)</span><br><span class="line">adaptive_gauss = cv2.adaptiveThreshold(img, <span class="number">255</span>,</span><br><span class="line">    cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, <span class="number">21</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>原理</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Otsu</td>
+<td>类间方差最大</td>
+<td>双峰直方图</td>
+</tr>
+<tr>
+<td>自适应均值</td>
+<td>局部均值-C</td>
+<td>光照不均</td>
+</tr>
+<tr>
+<td>自适应高斯</td>
+<td>局部高斯加权均值-C</td>
+<td>光照不均</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-区域生长法"><a href="#3-2-区域生长法" class="headerlink" title="3.2 区域生长法"></a>3.2 区域生长法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">region_growing</span>(<span class="params">img, seed, threshold=<span class="number">15</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从种子点开始，BFS 扩展满足灰度相似条件的邻域&quot;&quot;&quot;</span></span><br><span class="line">    h, w = img.shape</span><br><span class="line">    seed_value = <span class="built_in">int</span>(img[seed[<span class="number">0</span>], seed[<span class="number">1</span>]])</span><br><span class="line">    segmented = np.zeros_like(img, dtype=np.uint8)</span><br><span class="line">    queue = [seed]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> queue:</span><br><span class="line">        x, y = queue.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> segmented[x, y] == <span class="number">0</span>:</span><br><span class="line">            segmented[x, y] = <span class="number">255</span></span><br><span class="line">            <span class="keyword">for</span> dx, dy <span class="keyword">in</span> [(-<span class="number">1</span>,<span class="number">0</span>),(<span class="number">1</span>,<span class="number">0</span>),(<span class="number">0</span>,-<span class="number">1</span>),(<span class="number">0</span>,<span class="number">1</span>)]:</span><br><span class="line">                nx, ny = x+dx, y+dy</span><br><span class="line">                <span class="keyword">if</span> <span class="number">0</span> &lt;= nx &lt; h <span class="keyword">and</span> <span class="number">0</span> &lt;= ny &lt; w <span class="keyword">and</span> segmented[nx,ny] == <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">abs</span>(<span class="built_in">int</span>(img[nx,ny]) - seed_value) &lt;= threshold:</span><br><span class="line">                        queue.append((nx, ny))</span><br><span class="line">    <span class="keyword">return</span> segmented</span><br><span class="line"></span><br><span class="line"><span class="comment"># 阈值=15: 小区域, 阈值=30: 中等, 阈值=50: 可能过度合并</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-分水岭算法"><a href="#3-3-分水岭算法" class="headerlink" title="3.3 分水岭算法"></a>3.3 分水岭算法</h3><p>将图像看作地形图，灰度值 &#x3D; 海拔。从局部极小值”注水”，不同盆地相遇处筑坝。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">marker_watershed</span>(<span class="params">img</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;基于标记的分水岭分割&quot;&quot;&quot;</span></span><br><span class="line">    _, binary = cv2.threshold(img, <span class="number">0</span>, <span class="number">255</span>, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)</span><br><span class="line">    kernel = np.ones((<span class="number">3</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line">    opening = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel, iterations=<span class="number">2</span>)</span><br><span class="line">    sure_bg = cv2.dilate(opening, kernel, iterations=<span class="number">3</span>)</span><br><span class="line">    </span><br><span class="line">    dist = cv2.distanceTransform(opening, cv2.DIST_L2, <span class="number">5</span>)</span><br><span class="line">    _, sure_fg = cv2.threshold(dist, <span class="number">0.5</span>*dist.<span class="built_in">max</span>(), <span class="number">255</span>, <span class="number">0</span>)</span><br><span class="line">    sure_fg = np.uint8(sure_fg)</span><br><span class="line">    unknown = cv2.subtract(sure_bg, sure_fg)</span><br><span class="line">    </span><br><span class="line">    _, markers = cv2.connectedComponents(sure_fg)</span><br><span class="line">    markers += <span class="number">1</span></span><br><span class="line">    markers[unknown == <span class="number">255</span>] = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    img_color = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)</span><br><span class="line">    markers = cv2.watershed(img_color, markers)</span><br><span class="line">    img_color[markers == -<span class="number">1</span>] = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>]  <span class="comment"># 边界标红</span></span><br><span class="line">    <span class="keyword">return</span> img_color, markers</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、基于显著性分析的分割"><a href="#四、基于显著性分析的分割" class="headerlink" title="四、基于显著性分析的分割"></a>四、基于显著性分析的分割</h2><h3 id="4-1-频谱残差显著性-SR"><a href="#4-1-频谱残差显著性-SR" class="headerlink" title="4.1 频谱残差显著性 (SR)"></a>4.1 频谱残差显著性 (SR)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">spectral_residual_saliency</span>(<span class="params">img_gray</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;FSR — FFT → log幅度 → 减去均值 → 残差 → IFFT → 显著图&quot;&quot;&quot;</span></span><br><span class="line">    f = np.fft.fft2(img_gray.astype(np.float32))</span><br><span class="line">    fshift = np.fft.fftshift(f)</span><br><span class="line">    mag, phase = np.<span class="built_in">abs</span>(fshift), np.angle(fshift)</span><br><span class="line">    </span><br><span class="line">    log_mag = np.log(<span class="number">1</span> + mag)</span><br><span class="line">    avg_log_mag = cv2.blur(log_mag, (<span class="number">3</span>, <span class="number">3</span>))  <span class="comment"># 均值滤波 = 频谱&quot;背景&quot;</span></span><br><span class="line">    residual = log_mag - avg_log_mag          <span class="comment"># 残差 = 显著部分</span></span><br><span class="line">    </span><br><span class="line">    recon = np.exp(residual) * np.exp(<span class="number">1j</span> * phase)</span><br><span class="line">    recon_shift = np.fft.ifftshift(recon)</span><br><span class="line">    saliency = np.<span class="built_in">abs</span>(np.fft.ifft2(recon_shift))</span><br><span class="line">    </span><br><span class="line">    saliency = cv2.GaussianBlur(saliency, (<span class="number">5</span>,<span class="number">5</span>), <span class="number">1.5</span>)</span><br><span class="line">    <span class="keyword">return</span> cv2.normalize(saliency, <span class="literal">None</span>, <span class="number">0</span>, <span class="number">255</span>, cv2.NORM_MINMAX).astype(np.uint8)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-颜色对比度显著性-CC"><a href="#4-2-颜色对比度显著性-CC" class="headerlink" title="4.2 颜色对比度显著性 (CC)"></a>4.2 颜色对比度显著性 (CC)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">color_contrast_saliency</span>(<span class="params">img_rgb</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;LAB空间中像素与均值的欧式距离 → 显著图&quot;&quot;&quot;</span></span><br><span class="line">    lab = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2LAB).astype(np.float32)</span><br><span class="line">    mean_l, mean_a, mean_b = lab.mean(axis=(<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">    diff = np.sqrt((lab[:,:,<span class="number">0</span>]-mean_l)**<span class="number">2</span> +</span><br><span class="line">                   (lab[:,:,<span class="number">1</span>]-mean_a)**<span class="number">2</span> +</span><br><span class="line">                   (lab[:,:,<span class="number">2</span>]-mean_b)**<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> cv2.normalize(diff, <span class="literal">None</span>, <span class="number">0</span>, <span class="number">255</span>, cv2.NORM_MINMAX).astype(np.uint8)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-多尺度-DoG-显著性"><a href="#4-3-多尺度-DoG-显著性" class="headerlink" title="4.3 多尺度 DoG 显著性"></a>4.3 多尺度 DoG 显著性</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dog_saliency</span>(<span class="params">img_gray</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;不同尺度的高斯差模拟中心-周边机制&quot;&quot;&quot;</span></span><br><span class="line">    scales = [(<span class="number">1</span>,<span class="number">3</span>), (<span class="number">1</span>,<span class="number">5</span>), (<span class="number">1</span>,<span class="number">7</span>), (<span class="number">3</span>,<span class="number">9</span>)]</span><br><span class="line">    saliency = np.zeros_like(img_gray, dtype=np.float32)</span><br><span class="line">    <span class="keyword">for</span> s1, s2 <span class="keyword">in</span> scales:</span><br><span class="line">        g1 = cv2.GaussianBlur(img_gray, (<span class="number">0</span>,<span class="number">0</span>), s1)</span><br><span class="line">        g2 = cv2.GaussianBlur(img_gray, (<span class="number">0</span>,<span class="number">0</span>), s2)</span><br><span class="line">        saliency += cv2.absdiff(g1, g2)</span><br><span class="line">    <span class="keyword">return</span> cv2.normalize(saliency, <span class="literal">None</span>, <span class="number">0</span>, <span class="number">255</span>, cv2.NORM_MINMAX).astype(np.uint8)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-显著性驱动分割流程"><a href="#4-4-显著性驱动分割流程" class="headerlink" title="4.4 显著性驱动分割流程"></a>4.4 显著性驱动分割流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">显著图 → 阈值分割 (Otsu/均值+标准差/百分比)</span><br><span class="line">       → 形态学后处理 (闭运算填孔 + 开运算去噪)</span><br><span class="line">       → 轮廓查找 → bounding box 自动裁剪</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="三种方法对比"><a href="#三种方法对比" class="headerlink" title="三种方法对比"></a>三种方法对比</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心依据</th>
+<th align="center">需要先验</th>
+<th align="center">复杂度</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Canny 边缘</td>
+<td>梯度不连续性</td>
+<td align="center">❌</td>
+<td align="center">低</td>
+<td>轮廓清晰、尺寸测量</td>
+</tr>
+<tr>
+<td>Otsu 阈值</td>
+<td>灰度直方图分布</td>
+<td align="center">❌</td>
+<td align="center">低</td>
+<td>简单背景、高对比度</td>
+</tr>
+<tr>
+<td>区域生长</td>
+<td>灰度相似性+连通性</td>
+<td align="center">✅种子点</td>
+<td align="center">中</td>
+<td>特定目标提取</td>
+</tr>
+<tr>
+<td>分水岭</td>
+<td>地形学+连通性</td>
+<td align="center">✅标记</td>
+<td align="center">中</td>
+<td>粘连物体分离</td>
+</tr>
+<tr>
+<td>显著性</td>
+<td>颜色&#x2F;纹理对比度</td>
+<td align="center">❌</td>
+<td align="center">低-中</td>
+<td>自动目标定位</td>
+</tr>
+</tbody></table>
+<h3 id="实际工程流程"><a href="#实际工程流程" class="headerlink" title="实际工程流程"></a>实际工程流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入 → 预处理(去噪+增强) → 方法选择(Canny/Otsu/显著性)</span><br><span class="line">     → 后处理(形态学开闭→填孔→去小面积) → 输出掩膜/ROI</span><br></pre></td></tr></table></figure>
+
+<h3 id="选择建议"><a href="#选择建议" class="headerlink" title="选择建议"></a>选择建议</h3><ol>
+<li>场景简单 → Otsu</li>
+<li>需要轮廓 → Canny</li>
+<li>光照不均 → 自适应阈值</li>
+<li>特定目标 → 区域生长</li>
+<li>粘连目标 → 分水岭</li>
+<li>完全自动化 → 显著性检测</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Jasper Orion</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/">http://example.com/2026/01/19/图像分割_详细笔记/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Error' blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86-%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B-Canny-%E9%98%88%E5%80%BC%E5%88%86%E5%89%B2-%E5%8C%BA%E5%9F%9F%E7%94%9F%E9%95%BF-%E5%88%86%E6%B0%B4%E5%B2%AD-%E6%98%BE%E8%91%97%E6%80%A7%E6%A3%80%E6%B5%8B/">图像处理 边缘检测 Canny 阈值分割 区域生长 分水岭 显著性检测</a></div><div class="post-share"><div class="social-share" data-image="/uploads/HollowKnight.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像压缩 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">图像压缩 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">图像压缩 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第五章Python 3.12 + NumPy + Matplotlib   一、概述1.1 核心思想：三类冗余   冗余类型 定义 去除方法    编码冗余 灰度分布不均但等长编码 变长编码（哈夫曼&#x2F;算术）   像素间冗余 相邻像素高度相关 预测编码(DPCM)&#x2F;变换(DCT&#x2F;DWT)   心理视觉冗余 人眼对高频不敏感 量化（丢弃高频系数）   1.2 通用压缩模型12编码器: f(x,y) → 映射器(变换/预测) → 量化器(有损关键) → 符号编码器(熵编码) → 码流解码器: 码流 → 符号解码器 → 逆映射器 → ĝ(x,y)  1.3 分类   按重建 按原理 按码长    无损：哈夫曼&#x2F;算术&#x2F;LZW&#x2F;RLE 统计编码 定长编码   有损：DCT(JPEG)&#x2F;DWT(JPEG2000) 字典编码&#x2F;预测编码&#x2F;变换编码 变长编码    二、六大压缩编码技术（含代码）2.1 哈夫曼编码核心： 高频符号短码，低频符号长...</div></div></div></a><a class="pagination-related" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像形态学处理 — 完整教学笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">图像形态学处理 — 完整教学笔记</div></div><div class="info-2"><div class="info-item-1">图像形态学处理 — 完整教学笔记（含代码） 《数字图像处理》教学笔记 · 第三章Python 3.12 + OpenCV + NumPy + Matplotlib   一、形态学概述1.1 核心思想 “用结构元素探测图像，提取与结构元素相匹配的形状信息”  数学形态学基于集合论，关注的是图像的几何结构和形态特征。    对比 图像增强 形态学处理    关注点 像素灰度值 目标几何形状   典型操作 拉伸、滤波 膨胀、腐蚀、开&#x2F;闭   理论基础 灰度变换、卷积 集合论   1.2 基本术语   术语 含义    结构元素 (SE) 小的二值模板（3×3方形&#x2F;十字&#x2F;椭圆），中心为锚点   膨胀 扩大白色区域，缩小黑色孔洞   腐蚀 缩小白色区域，扩大黑色孔洞   开运算 先腐蚀后膨胀 → 去噪点、断开窄连接   闭运算 先膨胀后腐蚀 → 填孔洞、连接断口    二、二值形态学2.1 膨胀与腐蚀 — 手写实现123456789101112131415161718192021222324252627282930313233343536373839impor...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/uploads/HollowKnight.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Jasper Orion</div><div class="author-info-description">No more talking,just coding</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="fab fa-github"><i class="GitHub"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="fa fa-envelope"><i class="E-Mail"></i></a><a class="social-icon" href="https://github.com/JasperOrion" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a><a class="social-icon" href="/536584667@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #000000;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2-%E2%80%94-%E5%AE%8C%E6%95%B4%E6%95%99%E5%AD%A6%E7%AC%94%E8%AE%B0%EF%BC%88%E5%90%AB%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">图像分割 — 完整教学笔记（含代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 什么是图像分割</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E4%BA%8E%E8%BE%B9%E7%BC%98%E7%9A%84%E5%88%86%E5%89%B2-%E2%80%94-Canny-%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-number">1.2.</span> <span class="toc-text">二、基于边缘的分割 — Canny 边缘检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Canny-%E5%9B%9B%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 Canny 四步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%89%8B%E5%86%99-Canny-%E6%A0%B8%E5%BF%83%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 手写 Canny 核心步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%99%AA%E5%A3%B0%E5%BD%B1%E5%93%8D"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 噪声影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%88%86%E5%89%B2"><span class="toc-number">1.3.</span> <span class="toc-text">三、基于区域的分割</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%98%88%E5%80%BC%E6%B3%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 阈值法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Otsu-%E5%A4%A7%E6%B4%A5%E6%B3%95%EF%BC%88%E5%85%A8%E5%B1%80%E9%98%88%E5%80%BC%EF%BC%89"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">Otsu 大津法（全局阈值）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%8C%BA%E5%9F%9F%E7%94%9F%E9%95%BF%E6%B3%95"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 区域生长法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 分水岭算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9F%BA%E4%BA%8E%E6%98%BE%E8%91%97%E6%80%A7%E5%88%86%E6%9E%90%E7%9A%84%E5%88%86%E5%89%B2"><span class="toc-number">1.4.</span> <span class="toc-text">四、基于显著性分析的分割</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E9%A2%91%E8%B0%B1%E6%AE%8B%E5%B7%AE%E6%98%BE%E8%91%97%E6%80%A7-SR"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 频谱残差显著性 (SR)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%A2%9C%E8%89%B2%E5%AF%B9%E6%AF%94%E5%BA%A6%E6%98%BE%E8%91%97%E6%80%A7-CC"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 颜色对比度显著性 (CC)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%A4%9A%E5%B0%BA%E5%BA%A6-DoG-%E6%98%BE%E8%91%97%E6%80%A7"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 多尺度 DoG 显著性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%98%BE%E8%91%97%E6%80%A7%E9%A9%B1%E5%8A%A8%E5%88%86%E5%89%B2%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 显著性驱动分割流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">五、总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="toc-number">1.5.1.</span> <span class="toc-text">三种方法对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%B7%A5%E7%A8%8B%E6%B5%81%E7%A8%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text">实际工程流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.5.3.</span> <span class="toc-text">选择建议</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E6%95%B0%E5%AD%97%E6%B0%B4%E5%8D%B0_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="数字水印 — 完整教学笔记">数字水印 — 完整教学笔记</a><time datetime="2026-01-19T03:30:00.000Z" title="发表于 2026-01-19 11:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像压缩 — 完整教学笔记">图像压缩 — 完整教学笔记</a><time datetime="2026-01-19T03:00:00.000Z" title="发表于 2026-01-19 11:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像分割 — 完整教学笔记">图像分割 — 完整教学笔记</a><time datetime="2026-01-19T02:30:00.000Z" title="发表于 2026-01-19 10:30:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%BD%A2%E6%80%81%E5%AD%A6_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像形态学处理 — 完整教学笔记">图像形态学处理 — 完整教学笔记</a><time datetime="2026-01-19T02:00:00.000Z" title="发表于 2026-01-19 10:00:00">2026-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/19/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA_%E8%AF%A6%E7%BB%86%E7%AC%94%E8%AE%B0/" title="图像增强 — 完整教学笔记">图像增强 — 完整教学笔记</a><time datetime="2026-01-19T01:30:00.000Z" title="发表于 2026-01-19 09:30:00">2026-01-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Jasper Orion</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.4.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="FALL,IN,LOVE,WITH,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
