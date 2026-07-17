@@ -1,0 +1,22 @@
+---
+import { SITE } from '../config';
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">{SITE.title}</a>
+    <nav id="main-nav" class="nav" aria-label="主导航">
+      {SITE.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <button class="icon-button menu-button" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="main-nav">菜单</button>
+    <button class="icon-button theme-button" type="button" aria-label="切换主题" title="切换浅色、深色或系统主题">主题</button>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLButtonElement>('.menu-button'); const nav = document.querySelector<HTMLElement>('#main-nav');
+  const close = () => { nav?.removeAttribute('data-open'); menu?.setAttribute('aria-expanded','false'); };
+  menu?.addEventListener('click', () => { const open = nav?.getAttribute('data-open') !== 'true'; nav?.setAttribute('data-open',String(open)); menu.setAttribute('aria-expanded',String(open)); });
+  nav?.addEventListener('click', close); document.addEventListener('keydown', (e) => { if(e.key === 'Escape') close(); });
+  document.addEventListener('click', (e) => { if(!nav?.contains(e.target as Node) && !menu?.contains(e.target as Node)) close(); });
+  const themeButton = document.querySelector<HTMLButtonElement>('.theme-button'); const choices = ['system','light','dark'] as const;
+  themeButton?.addEventListener('click', () => { const current = localStorage.getItem('theme') ?? 'system'; const next = choices[(choices.indexOf(current as typeof choices[number]) + 1) % choices.length]; localStorage.setItem('theme',next); document.documentElement.dataset.theme = next === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light') : next; themeButton.title = `当前：${next}`; });
+</script>

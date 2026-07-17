@@ -1,0 +1,744 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-17T03:01:00.706Z",
+  "entries": [
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/激活函数.md",
+      "output": "content/ai-ml/deep-learning/concepts/激活函数.md",
+      "slug": "ai-ml/deep-learning/concepts/激活函数",
+      "title": "激活函数",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/链式法则.md",
+      "output": "content/ai-ml/deep-learning/concepts/链式法则.md",
+      "slug": "ai-ml/deep-learning/concepts/链式法则",
+      "title": "链式法则",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/深度学习.md",
+      "output": "content/ai-ml/deep-learning/concepts/深度学习.md",
+      "slug": "ai-ml/deep-learning/concepts/深度学习",
+      "title": "深度学习",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-25"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/深度学习应用领域.md",
+      "output": "content/ai-ml/deep-learning/concepts/深度学习应用领域.md",
+      "slug": "ai-ml/deep-learning/concepts/深度学习应用领域",
+      "title": "深度学习应用领域",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-25"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/神经网络.md",
+      "output": "content/ai-ml/deep-learning/concepts/神经网络.md",
+      "slug": "ai-ml/deep-learning/concepts/神经网络",
+      "title": "神经网络",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/神经网络训练.md",
+      "output": "content/ai-ml/deep-learning/concepts/神经网络训练.md",
+      "slug": "ai-ml/deep-learning/concepts/神经网络训练",
+      "title": "神经网络训练",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-25"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/梯度下降.md",
+      "output": "content/ai-ml/deep-learning/concepts/梯度下降.md",
+      "slug": "ai-ml/deep-learning/concepts/梯度下降",
+      "title": "梯度下降",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/BP神经网络与反向传播.md",
+      "output": "content/ai-ml/deep-learning/concepts/BP神经网络与反向传播.md",
+      "slug": "ai-ml/deep-learning/concepts/BP神经网络与反向传播",
+      "title": "BP 神经网络与反向传播",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/RBF神经网络.md",
+      "output": "content/ai-ml/deep-learning/concepts/RBF神经网络.md",
+      "slug": "ai-ml/deep-learning/concepts/RBF神经网络",
+      "title": "RBF 神经网络",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-07-01"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/concepts/SOM自组织网络.md",
+      "output": "content/ai-ml/deep-learning/concepts/SOM自组织网络.md",
+      "slug": "ai-ml/deep-learning/concepts/SOM自组织网络",
+      "title": "SOM 自组织映射网络",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/deep-learning/notes/第2章-神经网络.md",
+      "output": "content/ai-ml/deep-learning/notes/第2章-神经网络.md",
+      "slug": "ai-ml/deep-learning/notes/第2章-神经网络",
+      "title": "第2章：神经网络",
+      "type": "course-notes",
+      "domain": "ai-ml",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/产生式系统.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/产生式系统.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/产生式系统",
+      "title": "产生式系统",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/归结原理.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/归结原理.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/归结原理",
+      "title": "归结原理",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/可信度方法.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/可信度方法.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/可信度方法",
+      "title": "可信度方法（C-F Model）",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/框架表示法.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/框架表示法.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/框架表示法",
+      "title": "框架表示法",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/模糊推理.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/模糊推理.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/模糊推理",
+      "title": "模糊推理",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/人工智能的概念与定义.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/人工智能的概念与定义.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/人工智能的概念与定义",
+      "title": "人工智能的概念与定义",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/人工智能发展简史.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/人工智能发展简史.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/人工智能发展简史",
+      "title": "人工智能发展简史",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/人工智能三大学派.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/人工智能三大学派.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/人工智能三大学派",
+      "title": "人工智能三大学派",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-26"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/人工智能研究领域.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/人工智能研究领域.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/人工智能研究领域",
+      "title": "人工智能研究领域",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/推理的基本概念.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/推理的基本概念.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/推理的基本概念",
+      "title": "推理的基本概念",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/一阶谓词逻辑.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/一阶谓词逻辑.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/一阶谓词逻辑",
+      "title": "一阶谓词逻辑",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/证据理论.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/证据理论.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/证据理论",
+      "title": "证据理论（D-S Theory）",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/知识的概念与表示.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/知识的概念与表示.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/知识的概念与表示",
+      "title": "知识的概念与表示",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/知识图谱.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/知识图谱.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/知识图谱",
+      "title": "知识图谱",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/concepts/自然演绎推理.md",
+      "output": "content/ai-ml/introduction-to-ai/concepts/自然演绎推理.md",
+      "slug": "ai-ml/introduction-to-ai/concepts/自然演绎推理",
+      "title": "自然演绎推理",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第1章-绪论.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第1章-绪论.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第1章-绪论",
+      "title": "第1章 绪论 — 人工智能概述",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-26"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第2章-知识表示与知识图谱.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第2章-知识表示与知识图谱.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第2章-知识表示与知识图谱",
+      "title": "第2章 知识表示与知识图谱",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-26"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第3章-确定性推理方法.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第3章-确定性推理方法.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第3章-确定性推理方法",
+      "title": "第3章 确定性推理方法",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-26"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第4章-不确定性推理方法.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第4章-不确定性推理方法.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第4章-不确定性推理方法",
+      "title": "第4章 不确定性推理方法",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第5章-搜索求解策略.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第5章-搜索求解策略.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第5章-搜索求解策略",
+      "title": "第5章 搜索求解策略",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第6章-智能计算及其应用.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第6章-智能计算及其应用.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第6章-智能计算及其应用",
+      "title": "第6章 智能计算及其应用",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第7章-机器学习与专家系统.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第7章-机器学习与专家系统.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第7章-机器学习与专家系统",
+      "title": "第7章 机器学习与专家系统",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/ai-ml/introduction-to-ai/summaries/第8章 人工神经网络及其应用.md",
+      "output": "content/ai-ml/introduction-to-ai/summaries/第8章 人工神经网络及其应用.md",
+      "slug": "ai-ml/introduction-to-ai/summaries/第8章 人工神经网络及其应用",
+      "title": "第8章：人工神经网络及其应用",
+      "type": "summary",
+      "domain": "ai-ml",
+      "updated": "2026-07-14"
+    },
+    {
+      "source": "wiki/ai-ml/machine-learning/concepts/机器学习.md",
+      "output": "content/ai-ml/machine-learning/concepts/机器学习.md",
+      "slug": "ai-ml/machine-learning/concepts/机器学习",
+      "title": "机器学习",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-25"
+    },
+    {
+      "source": "wiki/ai-ml/machine-learning/concepts/人工智能.md",
+      "output": "content/ai-ml/machine-learning/concepts/人工智能.md",
+      "slug": "ai-ml/machine-learning/concepts/人工智能",
+      "title": "人工智能",
+      "type": "concept",
+      "domain": "ai-ml",
+      "updated": "2026-06-25"
+    },
+    {
+      "source": "wiki/algorithms/concepts/二分查找.md",
+      "output": "content/algorithms/concepts/二分查找.md",
+      "slug": "algorithms/concepts/二分查找",
+      "title": "二分查找",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-06-22"
+    },
+    {
+      "source": "wiki/algorithms/concepts/高精度计算.md",
+      "output": "content/algorithms/concepts/高精度计算.md",
+      "slug": "algorithms/concepts/高精度计算",
+      "title": "高精度计算",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-07-11"
+    },
+    {
+      "source": "wiki/algorithms/concepts/滑动窗口.md",
+      "output": "content/algorithms/concepts/滑动窗口.md",
+      "slug": "algorithms/concepts/滑动窗口",
+      "title": "滑动窗口",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-06-22"
+    },
+    {
+      "source": "wiki/algorithms/concepts/排序.md",
+      "output": "content/algorithms/concepts/排序.md",
+      "slug": "algorithms/concepts/排序",
+      "title": "排序",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-07-16"
+    },
+    {
+      "source": "wiki/algorithms/concepts/贪心算法.md",
+      "output": "content/algorithms/concepts/贪心算法.md",
+      "slug": "algorithms/concepts/贪心算法",
+      "title": "贪心算法",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-07-15"
+    },
+    {
+      "source": "wiki/algorithms/concepts/优先队列.md",
+      "output": "content/algorithms/concepts/优先队列.md",
+      "slug": "algorithms/concepts/优先队列",
+      "title": "优先队列",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-07-16"
+    },
+    {
+      "source": "wiki/algorithms/concepts/质数筛法.md",
+      "output": "content/algorithms/concepts/质数筛法.md",
+      "slug": "algorithms/concepts/质数筛法",
+      "title": "质数筛法",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-06-22"
+    },
+    {
+      "source": "wiki/algorithms/concepts/最大公约数与最小公倍数.md",
+      "output": "content/algorithms/concepts/最大公约数与最小公倍数.md",
+      "slug": "algorithms/concepts/最大公约数与最小公倍数",
+      "title": "最大公约数与最小公倍数",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-06-22"
+    },
+    {
+      "source": "wiki/algorithms/concepts/A-star-algorithm.md",
+      "output": "content/algorithms/concepts/a-star-algorithm.md",
+      "slug": "algorithms/concepts/a-star-algorithm",
+      "title": "A* 搜索算法",
+      "type": "concept",
+      "domain": "algorithms",
+      "updated": "2026-06-28"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1010-幂次方.md",
+      "output": "content/algorithms/solutions/luogu-p1010.md",
+      "slug": "algorithms/solutions/luogu-p1010",
+      "title": "P1010 [NOIP 1998 普及组] 幂次方",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-14"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1106-删数问题.md",
+      "output": "content/algorithms/solutions/luogu-p1106.md",
+      "slug": "algorithms/solutions/luogu-p1106",
+      "title": "P1106 删数问题",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-15"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1164-小-a-点菜.md",
+      "output": "content/algorithms/solutions/luogu-p1164.md",
+      "slug": "algorithms/solutions/luogu-p1164",
+      "title": "P1164 小 A 点菜",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-13"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1228-地毯填补问题.md",
+      "output": "content/algorithms/solutions/luogu-p1228.md",
+      "slug": "algorithms/solutions/luogu-p1228",
+      "title": "P1228 地毯填补问题",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-14"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1255-数楼梯.md",
+      "output": "content/algorithms/solutions/luogu-p1255.md",
+      "slug": "algorithms/solutions/luogu-p1255",
+      "title": "P1255 数楼梯",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-11"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1259-黑白棋子的移动.md",
+      "output": "content/algorithms/solutions/luogu-p1259.md",
+      "slug": "algorithms/solutions/luogu-p1259",
+      "title": "P1259 黑白棋子的移动",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-13"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1464-function.md",
+      "output": "content/algorithms/solutions/luogu-p1464.md",
+      "slug": "algorithms/solutions/luogu-p1464",
+      "title": "P1464 [PacNW 1999] Function",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-11"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1498-南蛮图腾.md",
+      "output": "content/algorithms/solutions/luogu-p1498.md",
+      "slug": "algorithms/solutions/luogu-p1498",
+      "title": "P1498 南蛮图腾",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-14"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p1990-覆盖墙壁.md",
+      "output": "content/algorithms/solutions/luogu-p1990.md",
+      "slug": "algorithms/solutions/luogu-p1990",
+      "title": "P1990 覆盖墙壁",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-13"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p3612-secret-cow-code.md",
+      "output": "content/algorithms/solutions/luogu-p3612.md",
+      "slug": "algorithms/solutions/luogu-p3612",
+      "title": "P3612 [USACO17JAN] Secret Cow Code S",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-13"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p3817-小-a-的糖果.md",
+      "output": "content/algorithms/solutions/luogu-p3817.md",
+      "slug": "algorithms/solutions/luogu-p3817",
+      "title": "P3817 小 A 的糖果",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-15"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p4447-分组.md",
+      "output": "content/algorithms/solutions/luogu-p4447.md",
+      "slug": "algorithms/solutions/luogu-p4447",
+      "title": "P4447 [AHOI2018 初中组] 分组",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-16"
+    },
+    {
+      "source": "wiki/algorithms/solutions/luogu-p5019-铺设道路.md",
+      "output": "content/algorithms/solutions/luogu-p5019.md",
+      "slug": "algorithms/solutions/luogu-p5019",
+      "title": "P5019 [NOIP 2018 提高组] 铺设道路",
+      "type": "solution",
+      "domain": "algorithms",
+      "updated": "2026-07-16"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/差错控制.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/差错控制.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/差错控制",
+      "title": "差错控制",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/封装成帧.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/封装成帧.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/封装成帧",
+      "title": "封装成帧",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/介质访问控制.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/介质访问控制.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/介质访问控制",
+      "title": "介质访问控制",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/路由选择协议.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/路由选择协议.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/路由选择协议",
+      "title": "路由选择协议",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/网络层两种服务模型.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/网络层两种服务模型.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/网络层两种服务模型",
+      "title": "网络层两种服务模型",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/ARQ协议-可靠传输与流量控制.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/ARQ协议-可靠传输与流量控制.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/ARQ协议-可靠传输与流量控制",
+      "title": "ARQ 协议 — 可靠传输与流量控制",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/ICMP与网络诊断.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/ICMP与网络诊断.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/ICMP与网络诊断",
+      "title": "ICMP 与网络诊断",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/IP数据报的发送与转发.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/IP数据报的发送与转发.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/IP数据报的发送与转发",
+      "title": "IP 数据报的发送与转发",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/IPv4地址与编址.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/IPv4地址与编址.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/IPv4地址与编址",
+      "title": "IPv4 地址与编址",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-30"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/IPv4数据报首部格式.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/IPv4数据报首部格式.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/IPv4数据报首部格式",
+      "title": "IPv4 数据报首部格式",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/concepts/VPN与NAT.md",
+      "output": "content/cs-fundamentals/computer-networks/concepts/VPN与NAT.md",
+      "slug": "cs-fundamentals/computer-networks/concepts/VPN与NAT",
+      "title": "VPN 与 NAT",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/notes/第3章-数据链路层.md",
+      "output": "content/cs-fundamentals/computer-networks/notes/第3章-数据链路层.md",
+      "slug": "cs-fundamentals/computer-networks/notes/第3章-数据链路层",
+      "title": "第3章：数据链路层",
+      "type": "course-notes",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/computer-networks/notes/第4章-网络层.md",
+      "output": "content/cs-fundamentals/computer-networks/notes/第4章-网络层.md",
+      "slug": "cs-fundamentals/computer-networks/notes/第4章-网络层",
+      "title": "第4章：网络层",
+      "type": "course-notes",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-29"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/concurrency-control.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/concurrency-control.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/concurrency-control",
+      "title": "并发控制",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/database-integrity.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/database-integrity.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/database-integrity",
+      "title": "数据库完整性",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/database-recovery.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/database-recovery.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/database-recovery",
+      "title": "数据库恢复技术",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/database-security.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/database-security.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/database-security",
+      "title": "数据库安全性",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/er-diagram.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/er-diagram.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/er-diagram",
+      "title": "E-R 图概念设计",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/relational-algebra.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/relational-algebra.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/relational-algebra",
+      "title": "关系代数运算",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/relational-database-theory.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/relational-database-theory.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/relational-database-theory",
+      "title": "关系数据库理论",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/cs-fundamentals/data-base-system/concepts/sql-syntax.md",
+      "output": "content/cs-fundamentals/data-base-system/concepts/sql-syntax.md",
+      "slug": "cs-fundamentals/data-base-system/concepts/sql-syntax",
+      "title": "SQL 语法",
+      "type": "concept",
+      "domain": "cs-fundamentals",
+      "updated": "2026-06-23"
+    },
+    {
+      "source": "wiki/programming/cpp/concepts/std-sort.md",
+      "output": "content/programming/cpp/concepts/std-sort.md",
+      "slug": "programming/cpp/concepts/std-sort",
+      "title": "std::sort 排序函数",
+      "type": "concept",
+      "domain": "programming",
+      "updated": "2026-07-15"
+    },
+    {
+      "source": "wiki/programming/cpp/concepts/vector.md",
+      "output": "content/programming/cpp/concepts/vector.md",
+      "slug": "programming/cpp/concepts/vector",
+      "title": "vector",
+      "type": "concept",
+      "domain": "programming",
+      "updated": "2026-06-22"
+    },
+    {
+      "source": "wiki/programming/tools/concepts/sql.md",
+      "output": "content/programming/tools/concepts/sql.md",
+      "slug": "programming/tools/concepts/sql",
+      "title": "SQL",
+      "type": "concept",
+      "domain": "programming",
+      "updated": "2026-06-23"
+    }
+  ]
+}

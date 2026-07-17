@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import EmptyState from '../components/EmptyState.astro'; import { getArticles } from '../utils/content'; import { groupByYear } from '../utils/archive'; import { formatDate } from '../utils/date'; import { articleUrl } from '../utils/url'; const groups=groupByYear(await getArticles());
+---
+<BaseLayout title="时间归档"><div class="container page"><h1>时间归档</h1>{groups.length?groups.map(([year,items])=><section class="archive-year"><h2>{year}</h2>{items.map(a=><div class="archive-row"><a href={articleUrl(a.data.slug)}>{a.data.title}</a><time datetime={a.data.updated.toISOString()}>{formatDate(a.data.updated)}</time></div>)}</section>):<EmptyState/>}</div></BaseLayout>

@@ -1,0 +1,5 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro'; import { getArticles } from '../../utils/content';
+export async function getStaticPaths(){const all=await getArticles();return [...new Set(all.map(a=>a.data.series).filter(Boolean))].map(series=>({params:{series:series!},props:{series,articles:all.filter(a=>a.data.series===series).sort((a,b)=>a.data.created.getTime()-b.data.created.getTime()||a.data.title.localeCompare(b.data.title,'zh-CN')||a.data.slug.localeCompare(b.data.slug))}}))} const {series,articles}=Astro.props;
+---
+<ListLayout title={`系列：${series}`} articles={articles}/>

@@ -1,0 +1,5 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro'; import { getArticles } from '../../utils/content';
+const articles = (await getArticles()).slice(0,10);
+---
+<ListLayout title="全部内容" description="按最近更新顺序浏览所有公开内容。" articles={articles}/>

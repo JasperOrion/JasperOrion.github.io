@@ -1,0 +1,11 @@
+---
+import type { Article } from '../utils/content'; import { formatDate } from '../utils/date'; import { articleUrl } from '../utils/url'; import { routePart } from '../utils/tags'; import { typeLabel } from '../config';
+const { article } = Astro.props as { article: Article };
+---
+<article class="card">
+  <div class="card-meta"><span>{typeLabel(article.data.type)}</span><span>{article.data.domain}</span>{article.data.featured && <span>精选</span>}</div>
+  <h2><a href={articleUrl(article.data.slug)}>{article.data.title}</a></h2>
+  <p>{article.data.description}</p>
+  <div class="card-meta"><span>更新于 {formatDate(article.data.updated)}</span>{article.data.course && <span>{article.data.course}</span>}{article.data.difficulty && <span>{article.data.difficulty}</span>}</div>
+  <p>{article.data.tags.map((tag) => <a class="pill" href={`/tags/${routePart(tag)}/`}>{tag}</a>)}</p>
+</article>

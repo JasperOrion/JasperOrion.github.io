@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import EmptyState from '../../components/EmptyState.astro'; import { getArticles } from '../../utils/content'; import { routePart } from '../../utils/tags'; const all=await getArticles(); const map=new Map<string,number>(); all.flatMap(a=>a.data.tags).forEach(t=>map.set(t,(map.get(t)??0)+1)); const items=[...map].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'zh-CN'));
+---
+<BaseLayout title="标签"><div class="container page"><h1>标签</h1>{items.length?<p>{items.map(([v,n])=><a class="pill" href={`/tags/${routePart(v)}/`}>{v} · {n}</a>)}</p>:<EmptyState/>}</div></BaseLayout>

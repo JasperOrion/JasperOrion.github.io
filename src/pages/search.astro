@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="搜索" description="搜索公开文章的标题、描述、标签、领域和正文。"><div class="container page"><h1>搜索</h1><p>索引在生产构建后生成；搜索不可用时不会影响普通页面阅读。</p><div id="search" class="search-box"></div><noscript><div class="empty">请启用 JavaScript 使用站内搜索。</div></noscript></div><link slot="head" href="/pagefind/pagefind-ui.css" rel="stylesheet"/><script is:inline type="module">import{PagefindUI}from'/pagefind/pagefind-ui.js';new PagefindUI({element:'#search',showSubResults:true,showImages:false,translations:{placeholder:'搜索公开内容',zero_results:'没有找到「[SEARCH_TERM]」相关内容'}});</script></BaseLayout>

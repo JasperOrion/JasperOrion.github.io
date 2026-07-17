@@ -1,0 +1,38 @@
+{
+  "name": "jasperorion.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run content:prepare && cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "node --test tests/*.test.mjs",
+    "content:export": "node scripts/export-wiki.mjs",
+    "content:validate": "node scripts/validate-content.mjs",
+    "content:prepare": "node scripts/prepare-content.mjs",
+    "build": "npm run content:validate && npm run content:prepare && cross-env ASTRO_TELEMETRY_DISABLED=1 astro check && cross-env ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "latest",
+    "@astrojs/sitemap": "latest",
+    "astro": "latest",
+    "github-slugger": "^2.0.0",
+    "gray-matter": "^4.0.3",
+    "hast-util-to-html": "^9.0.5",
+    "katex": "^0.16.22",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "unist-util-visit": "^5.0.0",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@astrojs/markdown-remark": "latest",
+    "@pagefind/default-ui": "^1.4.0",
+    "@types/node": "^24.0.0",
+    "cross-env": "^7.0.3",
+    "pagefind": "^1.4.0",
+    "typescript": "^5.8.0"
+  }
+}

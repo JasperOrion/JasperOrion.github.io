@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import EmptyState from '../../components/EmptyState.astro'; import { counts,getArticles } from '../../utils/content'; const items=counts(await getArticles(),a=>a.data.domain);
+---
+<BaseLayout title="学习领域"><div class="container page"><h1>学习领域</h1>{items.length?<div class="grid">{items.map(([v,n])=><a class="card" href={`/topics/${encodeURIComponent(v)}/`}><strong>{v}</strong><br/>{n} 篇</a>)}</div>:<EmptyState/>}</div></BaseLayout>

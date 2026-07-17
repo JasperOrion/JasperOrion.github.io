@@ -1,0 +1,5 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro'; import { getArticles } from '../../utils/content'; import { routePart } from '../../utils/tags';
+export async function getStaticPaths(){const all=await getArticles();return [...new Set(all.flatMap(a=>a.data.tags))].map(tag=>({params:{tag:routePart(tag)},props:{tag,articles:all.filter(a=>a.data.tags.includes(tag))}}))} const {tag,articles}=Astro.props;
+---
+<ListLayout title={`标签：${tag}`} articles={articles}/>

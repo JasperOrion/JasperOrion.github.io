@@ -1,0 +1,5 @@
+---
+import ListLayout from '../../../layouts/ListLayout.astro'; import { getArticles } from '../../../utils/content';
+export async function getStaticPaths(){const all=await getArticles();const keys=[...new Set(all.filter(a=>a.data.course).map(a=>`${a.data.domain}\0${a.data.course}`))];return keys.map(k=>{const[domain,course]=k.split('\0');return{params:{domain,course:course!},props:{domain,course,articles:all.filter(a=>a.data.domain===domain&&a.data.course===course)}}})} const {domain,course,articles}=Astro.props;
+---
+<ListLayout title={`${domain} · ${course}`} articles={articles}/>

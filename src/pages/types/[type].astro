@@ -1,0 +1,5 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro'; import { typeLabel } from '../../config'; import { getArticles } from '../../utils/content';
+export async function getStaticPaths(){const all=await getArticles();return [...new Set(all.map(a=>a.data.type))].map(type=>({params:{type},props:{type,articles:all.filter(a=>a.data.type===type)}}))} const {type,articles}=Astro.props;
+---
+<ListLayout title={typeLabel(type)} articles={articles}/>

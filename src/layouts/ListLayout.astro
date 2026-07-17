@@ -1,0 +1,5 @@
+---
+import BaseLayout from './BaseLayout.astro'; import ArticleCard from '../components/ArticleCard.astro'; import EmptyState from '../components/EmptyState.astro'; import type { Article } from '../utils/content';
+const { title, description, articles = [] } = Astro.props as { title: string; description?: string; articles: Article[] };
+---
+<BaseLayout title={title} description={description}><div class="container page"><p class="eyebrow">Knowledge index</p><h1 class="page-title">{title}</h1>{description && <p class="lede">{description}</p>}<div class="list">{articles.length ? articles.map((article) => <ArticleCard article={article}/>) : <EmptyState/>}</div><slot/></div></BaseLayout>

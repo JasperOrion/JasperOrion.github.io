@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import { SITE } from '../config';
+---
+<BaseLayout title="关于"><div class="container page"><article class="prose"><h1>关于</h1><p>{SITE.intro[0]}</p><p>{SITE.intro[1]}</p><p>本站是个人技术博客与计算机科学学习知识库的公开展示站点。只有在原 Wiki 中明确标记为公开的内容才会发布。</p><p><a href={SITE.github}>GitHub：jasperorion</a></p></article></div></BaseLayout>

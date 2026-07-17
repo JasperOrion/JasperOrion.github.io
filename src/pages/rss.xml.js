@@ -1,0 +1,2 @@
+import rss from '@astrojs/rss'; import { getArticles } from '../utils/content'; import { SITE } from '../config'; import { articleUrl } from '../utils/url';
+export async function GET(context){const articles=await getArticles();return rss({title:SITE.title,description:SITE.description,site:context.site,items:articles.map(a=>({title:a.data.title,description:a.data.description,pubDate:a.data.updated,link:articleUrl(a.data.slug),categories:a.data.tags}))})}

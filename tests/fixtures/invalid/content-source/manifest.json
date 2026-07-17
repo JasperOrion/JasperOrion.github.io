@@ -1,0 +1,1 @@
+{"schemaVersion":1,"generatedAt":"2026-07-17T00:00:00.000Z","entries":[{"source":"wiki/a.md","output":"content/a.md","slug":"duplicate","title":"A","type":"concept","domain":"test","updated":"2026-07-17"},{"source":"wiki/b.md","output":"content/b.md","slug":"duplicate","title":"B","type":"concept","domain":"test","updated":"2026-07-17"}]}

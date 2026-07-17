@@ -1,0 +1,6 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro'; import { SITE } from '../../config'; import { getArticles } from '../../utils/content';
+export async function getStaticPaths(){const all=await getArticles();const pages=Math.ceil(all.length/SITE.postsPerPage);return Array.from({length:Math.max(0,pages-1)},(_,i)=>{const page=i+2;return{params:{page:String(page)},props:{page,articles:all.slice((page-1)*SITE.postsPerPage,page*SITE.postsPerPage),total:pages}}})}
+const {page,articles,total}=Astro.props;
+---
+<ListLayout title={`全部内容 · 第 ${page} 页`} articles={articles}><nav class="pager" aria-label="分页"><a href={page===2?'/articles/':`/articles/${page-1}/`}>上一页</a><span>{page} / {total}</span>{page < total ? <a href={`/articles/${page+1}/`}>下一页</a> : null}</nav></ListLayout>
