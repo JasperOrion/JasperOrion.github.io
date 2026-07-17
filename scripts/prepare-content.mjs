@@ -13,11 +13,17 @@ export async function prepareContent(source = SOURCE, target = GENERATED) {
   if ((result.files ?? 0) === 0) {
     await fs.writeFile(path.join(target, 'content', '_empty.md'), `---\ntype: internal\ndomain: internal\ntitle: "Empty content marker"\ndescription: "Build-only marker for an empty collection."\ncreated: 2026-07-17\nupdated: 2026-07-17\ntags: []\nstatus: mature\npublish: true\nslug: __internal/empty\ninternal: true\n---\n`);
   }
-  await fs.cp(path.join(source, 'assets'), path.join(target, 'assets'), { recursive: true });
+  const sourceAssets = path.join(source, 'assets');
+  await fs.mkdir(path.join(target, 'assets'), { recursive: true });
+  await fs.cp(sourceAssets, path.join(target, 'assets'), { recursive: true, force: true }).catch((error) => {
+    if (error.code !== 'ENOENT') throw error;
+  });
   const publicAssets = path.join(path.dirname(target), 'public', 'content-assets');
   await fs.rm(publicAssets, { recursive: true, force: true });
   await fs.mkdir(publicAssets, { recursive: true });
-  await fs.cp(path.join(source, 'assets'), publicAssets, { recursive: true });
+  await fs.cp(sourceAssets, publicAssets, { recursive: true, force: true }).catch((error) => {
+    if (error.code !== 'ENOENT') throw error;
+  });
   return result;
 }
 
